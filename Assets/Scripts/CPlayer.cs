@@ -187,6 +187,16 @@ public class CPlayer : MonoBehaviour
     set { m_stunElapsedTime = value; }
     get { return m_stunElapsedTime; }
   }
+
+  public CMaterial CurrentMaterial
+  {
+    get { return m_currentMaterial}
+  }
+
+  public CTool CurrentTool
+  {
+    get { return m_currentTool; }
+  }
   #endregion
 
   #region Gizmos
