@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
 public class CPlayer : MonoBehaviour
 {
   #region Members
@@ -36,12 +35,14 @@ public class CPlayer : MonoBehaviour
   /// <summary>
   /// 
   /// </summary>
-  internal Vector3 m_direction = new Vector3(0.0f, 0.0f, -1.0f);
+  [SerializeField]
+  private Vector3 m_direction = new Vector3(0.0f, 0.0f, -1.0f);
 
   /// <summary>
   /// 
   /// </summary>
-  internal float m_interactRange = 3.0f;
+  [SerializeField]
+  private float m_interactRange = 3.0f;
   #region State Machine
   /// <summary>
   /// 
@@ -150,7 +151,7 @@ public class CPlayer : MonoBehaviour
   #endregion
 
   #region Properties
-  public Vector2 Direction
+  public Vector3 Direction
   {
     set { m_direction = value; }
     get { return m_direction; }
@@ -179,7 +180,7 @@ public class CPlayer : MonoBehaviour
   private void OnDrawGizmos()
   {
     Gizmos.color = Color.blue;
-    Gizmos.DrawLine(transform.position, transform.position + (Vector3)m_direction * InteractRange);
+    Gizmos.DrawLine(transform.position, transform.position + m_direction * InteractRange);
   }
 #endif
   #endregion
