@@ -42,6 +42,12 @@ public class CPlayer : MonoBehaviour
   /// 
   /// </summary>
   [SerializeField]
+  private Vector3 m_materialLocation = new Vector3(0.0f, 0.0f, 0.0f);
+
+  /// <summary>
+  /// 
+  /// </summary>
+  [SerializeField]
   private float m_interactRange = 3.0f;
   #region State Machine
   /// <summary>
@@ -98,6 +104,12 @@ public class CPlayer : MonoBehaviour
     rotation.eulerAngles =
       new Vector3(0.0f, Vector3.SignedAngle(Vector3.right, m_direction, Vector3.up) + 90.0f, 0.0f);
     transform.rotation = rotation;
+  }
+
+  public void DropMaterial(CMaterial material)
+  {
+    m_currentMaterial.transform.SetParent(null);
+    m_currentMaterial.transform.position = material.transform.position;
   }
 
   internal void Interact()
@@ -190,12 +202,19 @@ public class CPlayer : MonoBehaviour
 
   public CMaterial CurrentMaterial
   {
+    set { m_currentMaterial = value; }
     get { return m_currentMaterial; }
   }
 
   public CTool CurrentTool
   {
+    set { m_currentTool = value; }
     get { return m_currentTool; }
+  }
+
+  public Vector3 MaterialLocation
+  {
+    get { return m_materialLocation; }
   }
   #endregion
 
@@ -205,6 +224,9 @@ public class CPlayer : MonoBehaviour
   {
     Gizmos.color = Color.blue;
     Gizmos.DrawLine(transform.position, transform.position + m_direction * InteractRange);
+
+    Gizmos.color = Color.magenta;
+    Gizmos.DrawSphere(m_materialLocation, 0.2f);
   }
 #endif
   #endregion
