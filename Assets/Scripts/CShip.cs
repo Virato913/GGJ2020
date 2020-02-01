@@ -6,8 +6,8 @@ public class CShip : MonoBehaviour
 {
     public float m_life;
     public float m_destructiontimer;
-    public CComponent[] m_shipComponents = new CComponent[5]; //helix, floor, fireplace, wing, steamengine, spoilers;
-
+    public CComponent[] m_shipComponents; //helix, floor, fireplace, wing, steamengine, spoilers;
+    public CFloor m_floor; 
 
     public int m_damageMultiplier; //damage = components broken * dmgMultiplier
     public int m_componentsBroken; //counter of the available components
@@ -25,12 +25,9 @@ public class CShip : MonoBehaviour
         m_allComponentsBroken = false;
         m_componentsBroken = 0;
         m_damageMultiplier = 1;
-     
-        m_shipComponents[0] =  GameObject.Find("Helix").GetComponent<CComponent>();
-        m_shipComponents[1] = GameObject.Find("Wing").GetComponent<CComponent>();
-        m_shipComponents[2] = GameObject.Find("SteamEngine").GetComponent<CComponent>();
-        m_shipComponents[3] = GameObject.Find("Spoiler").GetComponent<CComponent>();
-        m_shipComponents[4] = GameObject.Find("FirePlace").GetComponent<CComponent>();
+        m_shipComponents = GameObject.FindObjectsOfType<CComponent>();
+        m_floor = GameObject.FindObjectOfType<CFloor>();
+
     }
 
     // Update is called once per frame
@@ -43,6 +40,7 @@ public class CShip : MonoBehaviour
             if (m_destructiontimer > m_timeToDestroy)
             {
                 m_destructiontimer = 0;
+                m_timeToDestroy = Random.Range(4, 7);
                 hijackComponent(); //randomly hijack a component
             }
         }
@@ -58,10 +56,10 @@ public class CShip : MonoBehaviour
 
     void hijackComponent() //random component destroy that uses only when there are still components that can be broke
     {
-            int x = Random.Range(0, 5);
+            int x = Random.Range(0, m_shipComponents.Length);
             while (m_shipComponents[x].m_functioning == false)
             {
-                x = Random.Range(0, 5);
+                x = Random.Range(0, m_shipComponents.Length);
             }
             m_shipComponents[x].m_functioning = false;
             m_allComponentsBroken = checkAllComponentsBroken();
@@ -70,7 +68,7 @@ public class CShip : MonoBehaviour
     }
     bool checkAllComponentsBroken() //if there are no components functioning then returns true
     {
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < m_shipComponents.Length; i++)
         {
             if(m_shipComponents[i].m_broken == false)
             {
@@ -83,7 +81,7 @@ public class CShip : MonoBehaviour
     void countBrokenComponents() //function that counts every functioning component
     {
         m_componentsBroken = 0;
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < m_shipComponents.Length; i++)
         {
             if(m_shipComponents[i].m_broken == true)
             {
@@ -94,7 +92,7 @@ public class CShip : MonoBehaviour
 
     bool checkAllComponentsNotFunctioning ()
     {
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < m_shipComponents.Length; i++)
         {
             if(m_shipComponents[i].m_functioning == true)
             {
