@@ -12,6 +12,8 @@ public class CComponent : MonoBehaviour
     public bool m_broken; //if this component is broken
     public bool m_fixed; //temporary bool simulating the minigame win/lose outcome
 
+    private float m_interactRange = 4.0f;
+    CPlayer m_player = null;
     public TOOL_TYPES m_toolID;
     //possible reference to minigame
     // Start is called before the first frame update
@@ -66,16 +68,29 @@ public class CComponent : MonoBehaviour
         return m_toolID;
     }
 
-    public void interact(CPlayer jugador)
+    public void interact(CPlayer player)
     {
-        /*if( jugador.CurrentTool == m_toolID) 
-         {
-            repair();
-         }
-         else 
-         {
-            temporaryFix();
-         }
-          */
+        m_player = player;
+        if (Vector3.Distance(m_player.transform.position, transform.position) > m_interactRange)
+        {
+            m_player = null;
+            if(m_fixing == true)
+            {
+               m_fixing = false;
+
+
+            }
+        }
+        else
+        {
+            if (player.CurrentTool.m_type == m_toolID)
+            {
+                repair();
+            }
+            else
+            {
+                temporaryFix();
+            }
+        }
     }
 }
