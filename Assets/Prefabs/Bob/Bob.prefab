@@ -76,7 +76,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: what do you want to create?
+  m_Text: what do you want to create??
 --- !u!1 &5860037426662822179
 GameObject:
   m_ObjectHideFlags: 0
