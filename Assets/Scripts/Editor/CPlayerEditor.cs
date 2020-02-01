@@ -14,6 +14,7 @@ public class CPlayerEditor : Editor
       myTarget.Direction.normalized :
       new Vector3(0.0f, 0.0f, -1.0f);
     myTarget.InteractRange = Mathf.Clamp(Mathf.Abs(myTarget.InteractRange), 1.0f, 5.0f);
+    myTarget.UpdateRotation();
   }
 }
 #endif

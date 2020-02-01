@@ -89,23 +89,31 @@ public class CPlayer : MonoBehaviour
       m_direction = direction;
     }
 
+    UpdateRotation();
+  }
+
+  public void UpdateRotation()
+  {
     var rotation = transform.rotation;
-    rotation.eulerAngles = 
+    rotation.eulerAngles =
       new Vector3(0.0f, Vector3.SignedAngle(Vector3.right, m_direction, Vector3.up) + 90.0f, 0.0f);
     transform.rotation = rotation;
   }
 
   internal void Interact()
   {
+    var collider = GetComponent<Collider>();
+
     RaycastHit hit;
+    Debug.DrawRay(collider.bounds.center, m_direction * m_interactRange, Color.red);
     // Does the ray intersect any objects excluding the player layer
-    if (Physics.Raycast(transform.position, m_direction, out hit, m_interactRange))
+    if (Physics.Raycast(collider.bounds.center, m_direction, out hit, m_interactRange))
     {
-        if (hit.collider.gameObject.GetComponent<CBob>() != null)
-        {
-            hit.collider.gameObject.GetComponent<CBob>().Interact();
-        }
-        Debug.Log("Did Hit");
+      if (hit.collider.gameObject.GetComponent<CBob>() != null)
+      {
+        hit.collider.gameObject.GetComponent<CBob>().Interact();
+      }
+      Debug.Log("Did Hit");
     }
   }
 
@@ -144,6 +152,7 @@ public class CPlayer : MonoBehaviour
   void Start()
   {
     InitStateMachine();
+    UpdateRotation();
   }
 
   /// <summary>
