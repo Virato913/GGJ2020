@@ -33,11 +33,20 @@ public class CPieceButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        UpdateData();
     }
 
     void TaskOnClick()
     {
         CBob.CheckMaterialsNeeded(m_tool);
+    }
+
+    void UpdateData()
+    {
+        m_materialList.text = "";
+        for (int i = 0; i < m_tool.m_materialListCount.Count; i++)
+        {
+            m_materialList.text += CBob.m_materialListCount[i].ToString() + "/" + m_tool.m_materialListCount[i].ToString() + " " + m_tool.m_materialList[i].ToString() + "\n";
+        }
     }
 }
