@@ -13,17 +13,18 @@ public enum MatList
 
 public class CMaterial : MonoBehaviour
 {
-    MatList m_type;
+  [SerializeField]
+    private MatList m_type;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Interact(CPlayer player)
+  {
+    if (player.CurrentMaterial != null)
     {
-        
+      player.DropMaterial(this);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    player.CurrentMaterial = this;
+    transform.SetParent(player.transform);
+    transform.position = player.MaterialLocation;
+    GetComponent<Collider>().enabled = false;
+  }
 }
