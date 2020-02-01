@@ -88,6 +88,11 @@ public class CPlayer : MonoBehaviour
     {
       m_direction = direction;
     }
+
+    var rotation = transform.rotation;
+    rotation.eulerAngles = 
+      new Vector3(0.0f, Vector3.SignedAngle(Vector3.right, m_direction, Vector3.up) + 90.0f, 0.0f);
+    transform.rotation = rotation;
   }
 
   internal void Interact()
