@@ -49,6 +49,11 @@ public class CShip : MonoBehaviour
         countBrokenComponents(); //check our available components needed to operate the damage over second
         m_allComponentsBroken = checkAllComponentsBroken();
         applyDamage(); //apply damage over second 
+
+        if(m_life < 0.0f)
+        {
+            m_life = 0.0f;
+        }
     }
 
     void hijackComponent() //random component destroy that uses only when there are still components that can be broke
