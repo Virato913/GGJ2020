@@ -117,9 +117,11 @@ public class CPlayer : MonoBehaviour
     //Vector3 localLocation = m_materialLocalLocation - transform.position;
     //Vector3.RotateTowards(localLocation, m_direction,
     // Mathf.Deg2Rad * Vector3.Angle(m_materialLocalLocation, m_direction), 10.0f);
-    Vector2 vector;
-    
-    m_materialLocation = m_materialLocalLocation + transform.position;
+
+    m_materialLocation = transform.position;
+    m_materialLocation += m_materialLocalLocation.x * transform.right.normalized;
+    m_materialLocation += m_materialLocalLocation.y * transform.up.normalized;
+    m_materialLocation += m_materialLocalLocation.z * transform.forward;
   }
 
   public void DropMaterial(CMaterial material)
