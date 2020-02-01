@@ -10,7 +10,7 @@ public class CComponent : MonoBehaviour
     public bool m_fixing; //if player is fixing this component
     public bool m_functioning; //if this component is functioning
     public bool m_broken; //if this component is broken
-    public static bool m_fixed; //temporary bool simulating the minigame win/lose outcome
+    public bool m_fixed; //temporary bool simulating the minigame win/lose outcome
 
     public TOOL_TYPES m_toolID;
     //possible reference to minigame
@@ -64,5 +64,18 @@ public class CComponent : MonoBehaviour
     public TOOL_TYPES getToolNeeded() // returns the id needed to repair this component
     {
         return m_toolID;
+    }
+
+    public void interact(CPlayer jugador)
+    {
+        /*if( jugador.CurrentTool == m_toolID) 
+         {
+            repair();
+         }
+         else 
+         {
+            temporaryFix();
+         }
+          */
     }
 }
