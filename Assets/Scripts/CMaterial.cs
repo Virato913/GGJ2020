@@ -13,7 +13,7 @@ public enum MatList
 
 public class CMaterial : MonoBehaviour
 {
-  [SerializeField]
+    [SerializeField]
     private MatList m_type;
 
     public MatList type
@@ -22,14 +22,14 @@ public class CMaterial : MonoBehaviour
     }
 
     public void Interact(CPlayer player)
-  {
-    if (player.CurrentMaterial != null)
     {
-      player.DropMaterial(this);
+        if (player.CurrentMaterial != null)
+        {
+            player.DropMaterial(this);
+        }
+        player.CurrentMaterial = this;
+        transform.SetParent(player.transform);
+        transform.position = player.MaterialLocation;
+        GetComponent<Collider>().enabled = false;
     }
-    player.CurrentMaterial = this;
-    transform.SetParent(player.transform);
-    transform.position = player.MaterialLocation;
-    GetComponent<Collider>().enabled = false;
-  }
 }

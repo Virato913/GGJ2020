@@ -18,15 +18,16 @@ public class CTool : MonoBehaviour
     public List<MatList> m_materialList;
     public List<int> m_materialListCount;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Interact(CPlayer player)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (player.CurrentTool != null)
+        {
+            //player.DropMaterial(this);
+            //drop Tool/Piece
+        }
+        player.CurrentTool = this;
+        transform.SetParent(player.transform);
+        transform.position = player.MaterialLocation;
+        GetComponent<Collider>().enabled = false;
     }
 }

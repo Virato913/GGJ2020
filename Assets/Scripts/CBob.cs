@@ -72,11 +72,13 @@ public class CBob : MonoBehaviour
 
     public static void CheckMaterialsNeeded(CTool m_ToolInProgress)
     {
+        /*
         int totalMaterialsNeeded = 0;
         for (int i = 0; i < m_ToolInProgress.m_materialListCount.Count; i++)
         {
             totalMaterialsNeeded += m_ToolInProgress.m_materialListCount[i];
         }
+
 
         if (totalMaterialsNeeded <= 0)
         {
@@ -84,6 +86,34 @@ public class CBob : MonoBehaviour
             //give material
         }
         Debug.Log("Materiales restantes: " + totalMaterialsNeeded);
+        */
+
+        bool hasAll = false;
+        for (int i = 0; i < CBob.m_materialListCount.Count; i++)
+        {
+            for (int e = 0; e < m_ToolInProgress.m_materialList.Count; e++)
+            {
+                if (i == (int)m_ToolInProgress.m_materialList[e])
+                {
+                    if (CBob.m_materialListCount[i] >= m_ToolInProgress.m_materialListCount[e])
+                    {
+                        CBob.m_materialListCount[i] -= m_ToolInProgress.m_materialListCount[e];
+                        hasAll = true;
+                    }
+                    else
+                    {
+                        hasAll = false;
+                    }
+                }
+            }
+        }
+
+        if (hasAll == true)
+        {
+            Debug.Log("All materials in inventory");
+            Instantiate(m_ToolInProgress, GameObject.Find("BobTable").transform.position + new Vector3(0,1,0), Quaternion.identity);
+        }
+
     }
 
 #if UNITY_EDITOR
