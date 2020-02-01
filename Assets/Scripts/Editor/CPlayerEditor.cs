@@ -10,10 +10,10 @@ public class CPlayerEditor : Editor
     base.OnInspectorGUI();
     CPlayer myTarget = (CPlayer)target;
 
-    myTarget.Direction = EditorGUILayout.Vector2Field("Start Direction",
-      myTarget.Direction.normalized);
-    myTarget.InteractRange = EditorGUILayout.FloatField("Interact Range",
-      Mathf.Clamp(Mathf.Abs(myTarget.InteractRange), 1.0f, 5.0f));
+    myTarget.Direction = (myTarget.Direction.magnitude != 0) ?
+      myTarget.Direction.normalized :
+      new Vector3(0.0f, 0.0f, -1.0f);
+    myTarget.InteractRange = Mathf.Clamp(Mathf.Abs(myTarget.InteractRange), 1.0f, 5.0f);
   }
 }
 #endif
