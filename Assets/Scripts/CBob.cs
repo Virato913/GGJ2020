@@ -7,6 +7,12 @@ public class CBob : MonoBehaviour
 {
   public Canvas m_menu;
   bool interacting = false;
+  [SerializeField]
+  [Range(5.0f, 10.0f)]
+  private float m_interactRange = 7.0f;
+  CPlayer m_player = null;
+
+  static public List<int> m_materialListCount = new List<int> { 0, 0, 0, 0, 0 };
 
   // Start is called before the first frame update
   void Start()
@@ -18,31 +24,35 @@ public class CBob : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    //Quitar esto cuando ya se peuda interactuar
-    if (Input.GetKeyDown(KeyCode.Alpha0))
+    if (m_player != null)
     {
-      
+      if (Vector3.Distance(    m_player.transform.position, transform.position) > m_interactRange)
+      {
+        m_player = null;
+        CloseMenu();
+      }
     }
   }
 
-  public void Interact()
+  public void Interact(CPlayer player)
   {
-    if (interacting)
-    {
-      CloseMenu();
-    }
-    else
-    {
-      OpenMenu();
-    }
-    
+    //if (interacting)
+    //{
+    //    CloseMenu();
+    //}
+    //else
+    //{
+    m_player = player;
+    OpenMenu();
+    //}
+
     Debug.Log("Interactuando con Bob. Hola amigos.");
   }
 
   void OpenMenu()
   {
-      interacting = true;
-      m_menu.gameObject.SetActive(true);
+    interacting = true;
+    m_menu.gameObject.SetActive(true);
   }
 
   void CloseMenu()
@@ -52,7 +62,7 @@ public class CBob : MonoBehaviour
   }
 
 
-    public static void CheckMaterialsNeeded(CTool m_ToolInProgress)
+  public static void CheckMaterialsNeeded(CTool m_ToolInProgress)
   {
     int totalMaterialsNeeded = 0;
     for (int i = 0; i < m_ToolInProgress.m_materialListCount.Count; i++)
@@ -67,5 +77,21 @@ public class CBob : MonoBehaviour
     }
     Debug.Log("Materiales restantes: " + totalMaterialsNeeded);
   }
+
+#if UNITY_EDITOR
+  public void OnDrawGizmos()
+  {
+    var collider = GetComponent<Collider>();
+    Gizmos.color = Color.yellow;
+    if (collider == null)
+    {
+      Gizmos.DrawWireSphere(transform.position, m_interactRange);
+    }
+    else
+    {
+      Gizmos.DrawWireSphere(collider.bounds.center, m_interactRange);
+    }
+  }
+#endif
 
 }

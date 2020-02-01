@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
 public class CPlayer : MonoBehaviour
 {
   #region Members
@@ -36,12 +35,14 @@ public class CPlayer : MonoBehaviour
   /// <summary>
   /// 
   /// </summary>
-  internal Vector3 m_direction = new Vector3(0.0f, 0.0f, -1.0f);
+  [SerializeField]
+  private Vector3 m_direction = new Vector3(0.0f, 0.0f, -1.0f);
 
   /// <summary>
   /// 
   /// </summary>
-  internal float m_interactRange = 3.0f;
+  [SerializeField]
+  private float m_interactRange = 3.0f;
   #region State Machine
   /// <summary>
   /// 
@@ -87,19 +88,32 @@ public class CPlayer : MonoBehaviour
     {
       m_direction = direction;
     }
+
+    UpdateRotation();
+  }
+
+  public void UpdateRotation()
+  {
+    var rotation = transform.rotation;
+    rotation.eulerAngles =
+      new Vector3(0.0f, Vector3.SignedAngle(Vector3.right, m_direction, Vector3.up) + 90.0f, 0.0f);
+    transform.rotation = rotation;
   }
 
   internal void Interact()
   {
+    var collider = GetComponent<Collider>();
+
     RaycastHit hit;
+    Debug.DrawRay(collider.bounds.center, m_direction * m_interactRange, Color.red);
     // Does the ray intersect any objects excluding the player layer
-    if (Physics.Raycast(transform.position, m_direction, out hit, m_interactRange))
+    if (Physics.Raycast(collider.bounds.center, m_direction, out hit, m_interactRange))
     {
-        if (hit.collider.gameObject.GetComponent<CBob>() != null)
-        {
-            hit.collider.gameObject.GetComponent<CBob>().Interact();
-        }
-        Debug.Log("Did Hit");
+      if (hit.collider.gameObject.GetComponent<CBob>() != null)
+      {
+        hit.collider.gameObject.GetComponent<CBob>().Interact(this);
+      }
+      Debug.Log("Did Hit");
     }
   }
 
@@ -138,6 +152,7 @@ public class CPlayer : MonoBehaviour
   void Start()
   {
     InitStateMachine();
+    UpdateRotation();
   }
 
   /// <summary>
@@ -150,7 +165,7 @@ public class CPlayer : MonoBehaviour
   #endregion
 
   #region Properties
-  public Vector2 Direction
+  public Vector3 Direction
   {
     set { m_direction = value; }
     get { return m_direction; }
@@ -172,6 +187,16 @@ public class CPlayer : MonoBehaviour
     set { m_stunElapsedTime = value; }
     get { return m_stunElapsedTime; }
   }
+
+  public CMaterial CurrentMaterial
+  {
+    get { return m_currentMaterial; }
+  }
+
+  public CTool CurrentTool
+  {
+    get { return m_currentTool; }
+  }
   #endregion
 
   #region Gizmos
@@ -179,7 +204,7 @@ public class CPlayer : MonoBehaviour
   private void OnDrawGizmos()
   {
     Gizmos.color = Color.blue;
-    Gizmos.DrawLine(transform.position, transform.position + (Vector3)m_direction * InteractRange);
+    Gizmos.DrawLine(transform.position, transform.position + m_direction * InteractRange);
   }
 #endif
   #endregion
