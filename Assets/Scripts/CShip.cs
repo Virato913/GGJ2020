@@ -9,10 +9,10 @@ public class CShip : MonoBehaviour
     public CComponent[] m_shipComponents = new CComponent[5]; //helix, floor, fireplace, wing, steamengine, spoilers;
 
 
-    public int m_damagePerSecond; // function that calculates damage per component broken/destroyed
-    public int m_damageMultiplier; //damage = dps * dmgMultiplier
-    public int m_componentsAvailable; //counter of the available components
-    public bool m_allComponentsDestroyed; // bool that is true when are components are not functioning
+    public int m_damageMultiplier; //damage = components broken * dmgMultiplier
+    public int m_componentsBroken; //counter of the available components
+    public bool m_allComponentsBroken; // bool that is true when all components are broken
+    public bool m_allComponentsNotFunctioning; //bool that is true when all components are not functioning
     public float m_timeToDestroy; //random time to destroy a component
     //CFloor m_floor;
 
@@ -22,44 +22,72 @@ public class CShip : MonoBehaviour
         m_life = 100;
         m_destructiontimer = 0;
         m_timeToDestroy = Random.Range(4, 7);
-        m_allComponentsDestroyed = false;
-        m_componentsAvailable = 5;
+        m_allComponentsBroken = false;
+        m_componentsBroken = 0;
         m_damageMultiplier = 1;
-        m_damagePerSecond = 5;
-        
+     
+        m_shipComponents[0] =  GameObject.Find("Helix").GetComponent<CComponent>();
+        m_shipComponents[1] = GameObject.Find("Wing").GetComponent<CComponent>();
+        m_shipComponents[2] = GameObject.Find("SteamEngine").GetComponent<CComponent>();
+        m_shipComponents[3] = GameObject.Find("Spoiler").GetComponent<CComponent>();
+        m_shipComponents[4] = GameObject.Find("FirePlace").GetComponent<CComponent>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!m_allComponentsDestroyed)
+        m_allComponentsNotFunctioning = checkAllComponentsNotFunctioning();
+        if (!m_allComponentsNotFunctioning)
         {
             m_destructiontimer += Time.fixedDeltaTime;
             if (m_destructiontimer > m_timeToDestroy)
             {
                 m_destructiontimer = 0;
-                destroyComponent();
+                hijackComponent(); //randomly hijack a component
             }
         }
-        countAvailableComponents();
-        applyDamage();
+        countBrokenComponents(); //check our available components needed to operate the damage over second
+        m_allComponentsBroken = checkAllComponentsBroken();
+        applyDamage(); //apply damage over second 
     }
 
-    void destroyComponent()
+    void hijackComponent() //random component destroy that uses only when there are still components that can be broke
     {
-        if (!m_allComponentsDestroyed)
-        {
             int x = Random.Range(0, 5);
             while (m_shipComponents[x].m_functioning == false)
             {
                 x = Random.Range(0, 5);
             }
             m_shipComponents[x].m_functioning = false;
-            m_allComponentsDestroyed = checkAllComponentsDestroyed();
-        }
+            m_allComponentsBroken = checkAllComponentsBroken();
+        
 
     }
-    bool checkAllComponentsDestroyed() //if there are no components functioning then returns true
+    bool checkAllComponentsBroken() //if there are no components functioning then returns true
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            if(m_shipComponents[i].m_broken == false)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void countBrokenComponents() //function that counts every functioning component
+    {
+        m_componentsBroken = 0;
+        for(int i = 0; i < 5; i++)
+        {
+            if(m_shipComponents[i].m_broken == true)
+            {
+                m_componentsBroken++;
+            }
+        }
+    }
+
+    bool checkAllComponentsNotFunctioning ()
     {
         for(int i = 0; i < 5; i++)
         {
@@ -70,21 +98,8 @@ public class CShip : MonoBehaviour
         }
         return true;
     }
-
-    void countAvailableComponents() //function that counts every functioning component
-    {
-        m_componentsAvailable = 0;
-        for(int i = 0; i < 5; i++)
-        {
-            if(m_shipComponents[i].m_functioning == true)
-            {
-                m_componentsAvailable++;
-            }
-        }
-    }
-
     void applyDamage ()
     {
-        m_life -= ( (m_damageMultiplier * (m_damagePerSecond - m_componentsAvailable) * Time.fixedDeltaTime));
+        m_life -= ( (m_damageMultiplier *  m_componentsBroken) * Time.fixedDeltaTime);
     }
 }
