@@ -190,7 +190,7 @@ public class CPlayer : MonoBehaviour
 
   public CMaterial CurrentMaterial
   {
-    get { return m_currentMaterial}
+    get { return m_currentMaterial; }
   }
 
   public CTool CurrentTool
