@@ -8,6 +8,10 @@
   base(stateMachine)
   { }
 
+  /// <summary>
+  /// 
+  /// </summary>
+  /// <param name="entity"></param>
   public override void OnStateEnter(CPlayer entity)
   {
     base.OnStateEnter(entity);
