@@ -1,18 +1,182 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class CPlayer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+  #region Members
+  /// <summary>
+  /// 
+  /// </summary>
+  [SerializeField]
+  [Range(1.0f, 10.0f)]
+  private float m_moveSpeed = 1.0f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  [SerializeField]
+  [Range(2.0f, 7.0f)]
+  private float m_stunDuration = 5.0f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal float m_stunElapsedTime = 0.0f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  private CMaterial m_currentMaterial = null;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  private CTool m_currentTool = null;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal Vector2 m_direction = new Vector2(0.0f, -1.0f);
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal float m_interactRange = 3.0f;
+  #region State Machine
+  /// <summary>
+  /// 
+  /// </summary>
+  private CStateMachine<CPlayer> m_stateMachine = null;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal CPlayerIdleState m_idleState = null;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal CPlayerInteractState m_interactState = null;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal CPlayerMoveState m_moveState = null;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal CPlayerStunState m_stunState = null;
+  #endregion
+  #endregion
+
+  #region Methods
+  /// <summary>
+  /// 
+  /// </summary>
+  /// <param name="direction"></param>
+  internal void Move(Vector2 direction)
+  {
+    Vector2 currentPos = transform.position;
+
+    currentPos += (direction * Time.fixedDeltaTime * m_moveSpeed);
+
+    transform.position = currentPos;
+
+    if (direction.magnitude != 0)
     {
-        
+      m_direction = direction;
+    }
+  }
+
+  internal void Interact()
+  {
+    RaycastHit2D raycast =
+    Physics2D.Raycast(transform.position, m_direction, m_interactRange);
+    if(raycast.collider.gameObject.GetComponent<CBob>() != null)
+    {
+      raycast.collider.gameObject.GetComponent<CBob>().Interact();
+    }
+  }
+
+  private void InitStateMachine()
+  {
+    if (m_stateMachine == null)
+    {
+      m_stateMachine = new CStateMachine<CPlayer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    if (m_idleState == null)
     {
-        
+      m_idleState = new CPlayerIdleState(m_stateMachine);
     }
+
+    if (m_interactState == null)
+    {
+      m_interactState = new CPlayerInteractState(m_stateMachine);
+    }
+
+    if (m_moveState == null)
+    {
+      m_moveState = new CPlayerMoveState(m_stateMachine);
+    }
+
+    if (m_stunState == null)
+    {
+      m_stunState = new CPlayerStunState(m_stateMachine);
+    }
+
+    m_stateMachine.Init(m_idleState, this);
+  }
+  /// <summary>
+  /// 
+  /// </summary>
+  void Start()
+  {
+    InitStateMachine();
+  }
+
+  /// <summary>
+  /// 
+  /// </summary>
+  void FixedUpdate()
+  {
+    m_stateMachine.OnState(this);
+  }
+  #endregion
+
+  #region Properties
+  public Vector2 Direction
+  {
+    set { m_direction = value; }
+    get { return m_direction; }
+  }
+
+  public float InteractRange
+  {
+    set { m_interactRange = value; }
+    get { return m_interactRange; }
+  }
+
+  public float StunDuration
+  {
+    get { return m_stunDuration; }
+  }
+
+  public float StunElapsedTime
+  {
+    set { m_stunElapsedTime = value; }
+    get { return m_stunElapsedTime; }
+  }
+  #endregion
+
+  #region Gizmos
+#if UNITY_EDITOR
+  private void OnDrawGizmos()
+  {
+    Gizmos.color = Color.blue;
+    Gizmos.DrawLine(transform.position, transform.position + (Vector3)m_direction * InteractRange);
+  }
+#endif
+  #endregion
 }
