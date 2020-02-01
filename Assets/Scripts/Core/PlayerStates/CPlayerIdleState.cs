@@ -14,11 +14,14 @@ public class CPlayerIdleState : CState<CPlayer>
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStatePostUpdate(CPlayer entity)
+  public override void OnStatePostUpdate(CPlayer entity, bool fixedUpdate = true)
   {
-    if(Input.GetAxisRaw("Vertical") != 0 || Input.GetAxisRaw("Horizontal") != 0)
+    if (!fixedUpdate)
     {
-      m_stateMachine.ToState(entity.m_moveState, entity);
+      if (Input.GetAxisRaw("Vertical") != 0 || Input.GetAxisRaw("Horizontal") != 0)
+      {
+        m_stateMachine.ToState(entity.m_moveState, entity);
+      }
     }
   }
 
@@ -26,19 +29,22 @@ public class CPlayerIdleState : CState<CPlayer>
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStateUpdate(CPlayer entity)
+  public override void OnStateUpdate(CPlayer entity, bool fixedUpdate = true)
   {
-    if (Input.GetButtonDown("Jump"))
+    if (!fixedUpdate)
     {
-      entity.BeginInteract();
-    }
-    if (Input.GetButton("Jump"))
-    {
-      entity.OnInteract();
-    }
-    if (Input.GetButtonUp("Jump"))
-    {
-      entity.EndInteract();
+      if (Input.GetButtonDown("Jump"))
+      {
+        entity.BeginInteract();
+      }
+      if (Input.GetButton("Jump"))
+      {
+        entity.OnInteract();
+      }
+      if (Input.GetButtonUp("Jump"))
+      {
+        entity.EndInteract();
+      }
     }
   }
 }

@@ -49,11 +49,14 @@ public class CPlayerThrownState : CState<CPlayer>
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStatePostUpdate(CPlayer entity)
+  public override void OnStatePostUpdate(CPlayer entity, bool fixedUpdate = true)
   {
-    if (entity.ThrownElapsedTime >= entity.ThrownTime)
+    if (fixedUpdate)
     {
-      m_stateMachine.ToState(entity.m_stunState, entity);
+      if (entity.ThrownElapsedTime >= entity.ThrownTime)
+      {
+        m_stateMachine.ToState(entity.m_stunState, entity);
+      }
     }
   }
 
@@ -61,10 +64,13 @@ public class CPlayerThrownState : CState<CPlayer>
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStateUpdate(CPlayer entity)
+  public override void OnStateUpdate(CPlayer entity, bool fixedUpdate = true)
   {
-    entity.transform.position +=
-     (entity.ThrownDirection * (3.0f / entity.ThrownTime) * Time.fixedDeltaTime);
-    entity.ThrownElapsedTime += Time.fixedDeltaTime;
+    if (fixedUpdate)
+    {
+      entity.transform.position +=
+       (entity.ThrownDirection * (3.0f / entity.ThrownTime) * Time.fixedDeltaTime);
+      entity.ThrownElapsedTime += Time.fixedDeltaTime;
+    }
   }
 }
