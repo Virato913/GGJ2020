@@ -4,10 +4,10 @@ using UnityEngine;
 
 public enum MatList
 {
-    Log = 0,
-    Nail,
-    Cloth,
+    Cloth = 0,
+    Log,
     Metal,
+    Nail,
     Screw
 }
 
@@ -15,6 +15,11 @@ public class CMaterial : MonoBehaviour
 {
   [SerializeField]
     private MatList m_type;
+
+    public MatList type
+    {
+        get { return m_type; }
+    }
 
     public void Interact(CPlayer player)
   {

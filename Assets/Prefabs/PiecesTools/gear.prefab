@@ -96,5 +96,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_type: 1
   m_name: Gear
-  m_materialList: 03000000
-  m_materialListCount: 02000000
+  m_materialList: 02000000
+  m_materialListCount: 03000000
