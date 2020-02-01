@@ -54,6 +54,28 @@ public class CPlayer : MonoBehaviour
   /// </summary>
   [SerializeField]
   private float m_interactRange = 3.0f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  [SerializeField]
+  [Range(0.1f, 1.0f)]
+  private float m_thrownTime = 0.5f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  private float m_thrownElapsedTime = 0.0f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  private Vector3 m_thrownDirection = new Vector3(0.0f, 0.0f, 0.0f);
+
+  ///// <summary>
+  ///// 
+  ///// </summary>
+  //private float m_thrownSpeed = 0.0f;
   #region State Machine
   /// <summary>
   /// 
@@ -79,6 +101,11 @@ public class CPlayer : MonoBehaviour
   /// 
   /// </summary>
   internal CPlayerStunState m_stunState = null;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal CPlayerThrownState m_thrownState = null;
   #endregion
   #endregion
 
@@ -160,14 +187,19 @@ public class CPlayer : MonoBehaviour
 
   public void BeginInteract()
   {
-    if(!m_isInteracting)
-    m_isInteracting = true;
+    if (!m_isInteracting)
+      m_isInteracting = true;
   }
 
   public void EndInteract()
   {
-    if(m_isInteracting)
-    m_isInteracting = false;
+    if (m_isInteracting)
+      m_isInteracting = false;
+  }
+
+  public void EnterThrownState()
+  {
+    m_stateMachine.ToState(m_thrownState, this);
   }
 
   private void InitStateMachine()
@@ -195,6 +227,11 @@ public class CPlayer : MonoBehaviour
     if (m_stunState == null)
     {
       m_stunState = new CPlayerStunState(m_stateMachine);
+    }
+
+    if (m_thrownState == null)
+    {
+      m_thrownState = new CPlayerThrownState(m_stateMachine);
     }
 
     m_stateMachine.Init(m_idleState, this);
@@ -257,6 +294,23 @@ public class CPlayer : MonoBehaviour
   public Vector3 MaterialLocation
   {
     get { return m_materialLocation; }
+  }
+
+  public float ThrownTime
+  {
+    get { return m_thrownTime; }
+  }
+
+  public float ThrownElapsedTime
+  {
+    set { m_thrownElapsedTime = value; }
+    get { return m_thrownElapsedTime; }
+  }
+
+  public Vector3 ThrownDirection
+  {
+    set { m_thrownDirection = value; }
+    get { return m_thrownDirection; }
   }
   #endregion
 
