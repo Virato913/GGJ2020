@@ -111,7 +111,7 @@ public class CPlayer : MonoBehaviour
     {
       if (hit.collider.gameObject.GetComponent<CBob>() != null)
       {
-        hit.collider.gameObject.GetComponent<CBob>().Interact();
+        hit.collider.gameObject.GetComponent<CBob>().Interact(this);
       }
       Debug.Log("Did Hit");
     }

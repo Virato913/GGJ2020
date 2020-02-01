@@ -34,7 +34,7 @@ public class CPlayerMoveState : CState<CPlayer>
 
     entity.Move(direction.normalized);
 
-    if (Input.GetButtonDown("Jump"))
+    if (Input.GetButton("Jump"))
     {
       entity.Interact();
     }
