@@ -20,10 +20,11 @@ public class CMaterial : MonoBehaviour
   {
     if (player.CurrentMaterial != null)
     {
-
+      player.DropMaterial(this);
     }
     player.CurrentMaterial = this;
     transform.SetParent(player.transform);
     transform.position = player.MaterialLocation;
+    GetComponent<Collider>().enabled = false;
   }
 }

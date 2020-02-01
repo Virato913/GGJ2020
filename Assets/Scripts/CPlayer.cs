@@ -42,8 +42,13 @@ public class CPlayer : MonoBehaviour
   /// 
   /// </summary>
   [SerializeField]
+  private Vector3 m_materialLocalLocation = new Vector3(0.0f, 0.0f, 0.0f);
+
+  private float m_materialLocalRotation = 0.0f;
+
   private Vector3 m_materialLocation = new Vector3(0.0f, 0.0f, 0.0f);
 
+  private bool m_isInteracting = false;
   /// <summary>
   /// 
   /// </summary>
@@ -106,27 +111,61 @@ public class CPlayer : MonoBehaviour
     transform.rotation = rotation;
   }
 
+  public void UpdateMaterialLocation()
+  {
+    //m_materialLocalRotation = transform.rotation.eulerAngles.y;
+    //Vector3 localLocation = m_materialLocalLocation - transform.position;
+    //Vector3.RotateTowards(localLocation, m_direction,
+    // Mathf.Deg2Rad * Vector3.Angle(m_materialLocalLocation, m_direction), 10.0f);
+    Vector2 vector;
+    
+    m_materialLocation = m_materialLocalLocation + transform.position;
+  }
+
   public void DropMaterial(CMaterial material)
   {
     m_currentMaterial.transform.SetParent(null);
     m_currentMaterial.transform.position = material.transform.position;
+    m_currentMaterial.GetComponent<Collider>().enabled = true;
+    m_currentMaterial = null;
   }
 
-  internal void Interact()
+  internal void OnInteract()
   {
-    var collider = GetComponent<Collider>();
-
-    RaycastHit hit;
-    Debug.DrawRay(collider.bounds.center, m_direction * m_interactRange, Color.red);
-    // Does the ray intersect any objects excluding the player layer
-    if (Physics.Raycast(collider.bounds.center, m_direction, out hit, m_interactRange))
+    if (m_isInteracting)
     {
-      if (hit.collider.gameObject.GetComponent<CBob>() != null)
+      var collider = GetComponent<Collider>();
+
+      RaycastHit hit;
+      Debug.DrawRay(collider.bounds.center, m_direction * m_interactRange, Color.red);
+      // Does the ray intersect any objects excluding the player layer
+      if (Physics.Raycast(collider.bounds.center, m_direction, out hit, m_interactRange))
       {
-        hit.collider.gameObject.GetComponent<CBob>().Interact(this);
+        if (hit.collider.gameObject.GetComponent<CBob>() != null)
+        {
+          hit.collider.gameObject.GetComponent<CBob>().Interact(this);
+          EndInteract();
+        }
+        if (hit.collider.gameObject.GetComponent<CMaterial>() != null)
+        {
+          hit.collider.gameObject.GetComponent<CMaterial>().Interact(this);
+          EndInteract();
+        }
+        Debug.Log("Did Hit");
       }
-      Debug.Log("Did Hit");
     }
+  }
+
+  public void BeginInteract()
+  {
+    if(!m_isInteracting)
+    m_isInteracting = true;
+  }
+
+  public void EndInteract()
+  {
+    if(m_isInteracting)
+    m_isInteracting = false;
   }
 
   private void InitStateMachine()
@@ -173,6 +212,7 @@ public class CPlayer : MonoBehaviour
   void FixedUpdate()
   {
     m_stateMachine.OnState(this);
+    UpdateMaterialLocation();
   }
   #endregion
 
@@ -222,6 +262,8 @@ public class CPlayer : MonoBehaviour
 #if UNITY_EDITOR
   private void OnDrawGizmos()
   {
+    UpdateMaterialLocation();
+
     Gizmos.color = Color.blue;
     Gizmos.DrawLine(transform.position, transform.position + m_direction * InteractRange);
 
