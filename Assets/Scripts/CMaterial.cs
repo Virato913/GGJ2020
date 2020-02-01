@@ -4,26 +4,32 @@ using UnityEngine;
 
 public enum MatList
 {
-    Log = 0,
-    Nail,
-    Cloth,
+    Cloth = 0,
+    Log,
     Metal,
+    Nail,
     Screw
 }
 
 public class CMaterial : MonoBehaviour
 {
-    MatList m_type;
+  [SerializeField]
+    private MatList m_type;
 
-    // Start is called before the first frame update
-    void Start()
+    public MatList type
     {
-        
+        get { return m_type; }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Interact(CPlayer player)
+  {
+    if (player.CurrentMaterial != null)
     {
-        
+      player.DropMaterial(this);
     }
+    player.CurrentMaterial = this;
+    transform.SetParent(player.transform);
+    transform.position = player.MaterialLocation;
+    GetComponent<Collider>().enabled = false;
+  }
 }
