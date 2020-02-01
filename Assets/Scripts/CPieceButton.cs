@@ -25,7 +25,7 @@ public class CPieceButton : MonoBehaviour
         m_materialList.text = "";
         for (int i = 0; i < m_tool.m_materialListCount.Count; i++)
         {
-            m_materialList.text += m_tool.m_materialListCount[i].ToString() + " " + m_tool.m_materialList[i].ToString() + "\n";
+            m_materialList.text += CBob.m_materialListCount[i].ToString() + "/" + m_tool.m_materialListCount[i].ToString() + " " + m_tool.m_materialList[i].ToString() + "\n";
         }
 
     }
