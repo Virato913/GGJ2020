@@ -21,31 +21,38 @@ public class CBob : MonoBehaviour
     //Quitar esto cuando ya se peuda interactuar
     if (Input.GetKeyDown(KeyCode.Alpha0))
     {
-      if (interacting)
-      {
-        StopInteractiong();
-      }
-      else
-      {
-        Interact();
-      }
+      
     }
   }
 
   public void Interact()
   {
-    interacting = true;
-    m_menu.gameObject.SetActive(true);
+    if (interacting)
+    {
+      CloseMenu();
+    }
+    else
+    {
+      OpenMenu();
+    }
+    
     Debug.Log("Interactuando con Bob. Hola amigos.");
   }
 
-  void StopInteractiong()
+  void OpenMenu()
+  {
+      interacting = true;
+      m_menu.gameObject.SetActive(true);
+  }
+
+  void CloseMenu()
   {
     interacting = false;
     m_menu.gameObject.SetActive(false);
   }
 
-  public static void CheckMaterialsNeeded(CTool m_ToolInProgress)
+
+    public static void CheckMaterialsNeeded(CTool m_ToolInProgress)
   {
     int totalMaterialsNeeded = 0;
     for (int i = 0; i < m_ToolInProgress.m_materialListCount.Count; i++)
