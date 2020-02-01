@@ -8,10 +8,13 @@ public class CFloor : MonoBehaviour
 
     public float m_timeCounter; //timing counter 
     public float m_randomTime;
+    public int m_randomFloor;
+    CPlayer m_player = null;
     // Start is called before the first frame update
     void Start()
     {
         m_floor = GameObject.FindGameObjectsWithTag("floor");
+        m_player = GameObject.FindObjectOfType<CPlayer>();
         m_timeCounter = 0;
         m_randomTime = Random.Range(10, 15);
         //m_floor[14].GetComponent<MeshRenderer>().enabled = false;
@@ -33,8 +36,11 @@ public class CFloor : MonoBehaviour
 
     void destroyRandom()
     {
-        int x = Random.Range(0, m_floor.Length);
-        m_floor[x].GetComponent<MeshRenderer>().enabled = false;
-        m_floor[x].GetComponent<BoxCollider>().enabled = true;
+        m_randomFloor = Random.Range(0, m_floor.Length);
+        
+        m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = false;
+        m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = true;
+
     }
+
 }
