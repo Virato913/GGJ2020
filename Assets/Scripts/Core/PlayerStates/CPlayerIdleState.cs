@@ -28,9 +28,17 @@ public class CPlayerIdleState : CState<CPlayer>
   /// <param name="entity"></param>
   public override void OnStateUpdate(CPlayer entity)
   {
+    if (Input.GetButtonDown("Jump"))
+    {
+      entity.BeginInteract();
+    }
     if (Input.GetButton("Jump"))
     {
-      entity.Interact();
+      entity.OnInteract();
+    }
+    if (Input.GetButtonUp("Jump"))
+    {
+      entity.EndInteract();
     }
   }
 }
