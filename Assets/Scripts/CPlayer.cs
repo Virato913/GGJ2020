@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(BoxCollider))]
 public class CPlayer : MonoBehaviour
 {
   #region Members
@@ -36,7 +36,7 @@ public class CPlayer : MonoBehaviour
   /// <summary>
   /// 
   /// </summary>
-  internal Vector2 m_direction = new Vector2(0.0f, -1.0f);
+  internal Vector3 m_direction = new Vector3(0.0f, 0.0f, -1.0f);
 
   /// <summary>
   /// 
@@ -75,9 +75,9 @@ public class CPlayer : MonoBehaviour
   /// 
   /// </summary>
   /// <param name="direction"></param>
-  internal void Move(Vector2 direction)
+  internal void Move(Vector3 direction)
   {
-    Vector2 currentPos = transform.position;
+    Vector3 currentPos = transform.position;
 
     currentPos += (direction * Time.fixedDeltaTime * m_moveSpeed);
 
@@ -91,11 +91,15 @@ public class CPlayer : MonoBehaviour
 
   internal void Interact()
   {
-    RaycastHit2D raycast =
-    Physics2D.Raycast(transform.position, m_direction, m_interactRange);
-    if(raycast.collider.gameObject.GetComponent<CBob>() != null)
+    RaycastHit hit;
+    // Does the ray intersect any objects excluding the player layer
+    if (Physics.Raycast(transform.position, m_direction, out hit, m_interactRange))
     {
-      raycast.collider.gameObject.GetComponent<CBob>().Interact();
+        if (hit.collider.gameObject.GetComponent<CBob>() != null)
+        {
+            hit.collider.gameObject.GetComponent<CBob>().Interact();
+        }
+        Debug.Log("Did Hit");
     }
   }
 

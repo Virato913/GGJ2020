@@ -27,9 +27,10 @@ public class CPlayerMoveState : CState<CPlayer>
   /// <param name="entity"></param>
   public override void OnStateUpdate(CPlayer entity)
   {
-    Vector2 direction = new Vector2();
+    Vector3 direction = new Vector3();
     direction.x = Input.GetAxisRaw("Horizontal");
-    direction.y = Input.GetAxisRaw("Vertical");
+    direction.y = 0;
+    direction.z = Input.GetAxisRaw("Vertical");
 
     entity.Move(direction.normalized);
 
