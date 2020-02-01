@@ -40,6 +40,13 @@ public class CFloor : MonoBehaviour
         
         m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = false;
         m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = true;
+        if(((m_floor[m_randomFloor].transform.position.x + 3 > m_player.transform.position.x) 
+            && m_floor[m_randomFloor].transform.position.x < m_player.transform.position.x)
+            && ((m_floor[m_randomFloor].transform.position.z + 3 > m_player.transform.position.z) 
+            && (m_floor[m_randomFloor].transform.position.z < m_player.transform.position.z)))
+        {
+            m_player.EnterThrownState();
+        }
 
     }
 
