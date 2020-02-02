@@ -18,8 +18,9 @@ public class sclavos : MonoBehaviour
             cuantos += 1;
             transform.position = new Vector3(transform.position.x, transform.position.y - .1f, transform.position.z);
         }
-        else
+        if (cuantos == 4)
         {
+            cuantos += 1;
             GetComponent<SpriteRenderer>().color = Color.black;
             skrip.GetComponent<stabla>().cuantos += 1;
             ok = true;
