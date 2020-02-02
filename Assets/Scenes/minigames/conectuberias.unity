@@ -156,8 +156,8 @@ Camera:
   m_GameObject: {fileID: 725602535}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.9772253, g: 1, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -198,7 +198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 725602535}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 2.57, y: 1.87, z: -3.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c714ebcd3ede65444ae55b99df10926d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dificulty: 2
+  tiempo: 0
   tuberia: {fileID: 3911414734942583296, guid: 2683063eda400e04496aebcff6d99d24, type: 3}
   largo: {fileID: 7169250659275665092, guid: cb6322c0e2f4e7f4886c7a1a172f0ea4, type: 3}
   curva: {fileID: 9004850683874510328, guid: dbc0727b0aece1f4abea65b9bf3bc698, type: 3}

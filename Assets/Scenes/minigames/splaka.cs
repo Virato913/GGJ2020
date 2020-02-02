@@ -26,6 +26,7 @@ public class splaka : MonoBehaviour
         if(perimetro == 40)
         {
             end = true;
+            CSceneManager.LoadBobScene();
         }
     }
 }

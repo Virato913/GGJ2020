@@ -15,7 +15,7 @@ public class CPieceButton : MonoBehaviour
     void Start()
     {
         m_Bob = GameObject.Find("Bob").GetComponent<CBob>();
-        m_tool = Instantiate(m_tool);
+        //m_tool = Instantiate(m_tool);
 
         m_button = transform.Find("Button").GetComponent<Button>();
         m_button.onClick.AddListener(TaskOnClick);

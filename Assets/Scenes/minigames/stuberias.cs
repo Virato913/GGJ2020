@@ -109,6 +109,7 @@ public class stuberias : MonoBehaviour
         if(todas == 4)
         {
             end = true;
+            CSceneManager.LoadBobScene();
         }
         if (ya)
         {

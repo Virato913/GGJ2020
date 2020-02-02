@@ -63,6 +63,26 @@ public class CComponent : CInteractable
 
     public void repair() //call this function when the player has the right tool to repair
     {
+        switch (m_toolID)
+        {
+            case TOOL_TYPES.FLOOR:
+                CSceneManager.LoadFloorGame();
+                break;
+            case TOOL_TYPES.GEAR:
+                CSceneManager.LoadGearGame();
+                break;
+            case TOOL_TYPES.PIPE:
+                CSceneManager.LoadPipeGame();
+                break;
+            case TOOL_TYPES.PLATE:
+                //CSceneManager.LoadPlateGame();
+                break;
+            case TOOL_TYPES.WING:
+                //CSceneManager.LoadWingGame();
+                break;
+            default:
+                break;
+        }
         m_fixed = true; // all states go back to normality in the update
     }
 

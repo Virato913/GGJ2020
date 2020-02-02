@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-public class CFloor : CInteractable
+public class CFloor : MonoBehaviour
 {
   public GameObject[] m_floor; //all cells of floor prefab
 
@@ -55,11 +55,15 @@ public class CFloor : CInteractable
     if (m_appearMaterialCounter > m_randomAppearMaterialTime)
     {
       var index = Random.Range(0, m_floor.Length);
-      var floorTile = m_floor[index].GetComponent<CFloorTile>();
-      if (floorTile.CanSpawn)
+      var floor = m_floor[index];
+      if (floor.GetComponent<MeshRenderer>().enabled)
       {
-        m_appearMaterialCounter = 0.0f;
-        floorTile.SpawnMaterial(m_materialList[Random.Range(0, m_materialList.Count)]);
+        var floorTile = floor.GetComponent<CFloorTile>();
+        if (floorTile.CanSpawn)
+        {
+          m_appearMaterialCounter = 0.0f;
+          floorTile.SpawnMaterial(m_materialList[Random.Range(0, m_materialList.Count)]);
+        }
       }
       //m_appearMaterialCounter = 0;
       //m_randomAppearMaterialTime = Random.Range(5, 9);
@@ -72,27 +76,15 @@ public class CFloor : CInteractable
   {
     m_randomFloor = Random.Range(0, m_floor.Length);
 
-    m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = false;
-    m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = true;
+    m_floor[m_randomFloor].GetComponent<CFloorTile>().TimeToDestroy = m_randomDestroyTime;
 
-    if (Vector3.Distance(m_floor[m_randomFloor].transform.position, m_player.transform.position) < 2)
-    {
-      m_player.EnterThrownState();
-    }
-  }
-
-  public override void Interact(CPlayer player)
-  {
-    base.Interact(player);
-    m_player = player;
-    if ((m_player.CurrentPickupable as CMaterial) != null)
-    {
-      if ((m_player.CurrentPickupable as CMaterial).type == m_logId)
-      {
-        m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = true;
-        m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = false;
-      }
-    }
+    //m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = false;
+    //m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = true;
+    //
+    //if (Vector3.Distance(m_floor[m_randomFloor].transform.position, m_player.transform.position) < 2)
+    //{
+    //  m_player.EnterThrownState();
+    //}
   }
 
   void generateRandomMaterials()

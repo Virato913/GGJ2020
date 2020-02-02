@@ -96,6 +96,7 @@ public class scoser : MonoBehaviour
             GameObject.Destroy(hilos[este]);
             hilo = false;
             puntos[este].GetComponent<stube>().klikeado = false;
+            CSceneManager.LoadBobScene();
         }
     }
 }

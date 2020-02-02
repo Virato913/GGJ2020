@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c46e2452faff9a14abf2b33212768a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tiempo: 0
   touchPos: {x: 0, y: 0, z: 0}
   punto: {fileID: 3288462048313226789, guid: d4b76fcef34be2545abc1f744b765f21, type: 3}
   puntos: []
@@ -299,8 +300,8 @@ Camera:
   m_GameObject: {fileID: 1626873403}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0.8352941, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
