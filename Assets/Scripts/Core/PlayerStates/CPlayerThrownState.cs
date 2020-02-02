@@ -27,18 +27,39 @@ public class CPlayerThrownState : CState<CPlayer>
     {
       directions.Add(Vector3.forward);
     }
-    if (!Physics.Raycast(collider.bounds.center, Vector3.right, out hit, 3.0f))
+    else if (!Physics.Raycast(collider.bounds.center, Vector3.right, out hit, 3.0f))
     {
       directions.Add(Vector3.right);
     }
-    if (!Physics.Raycast(collider.bounds.center, Vector3.back, out hit, 3.0f))
+    else if (!Physics.Raycast(collider.bounds.center, Vector3.back, out hit, 3.0f))
     {
       directions.Add(Vector3.back);
     }
-    if (!Physics.Raycast(collider.bounds.center, Vector3.left, out hit, 3.0f))
+    else if (!Physics.Raycast(collider.bounds.center, Vector3.left, out hit, 3.0f))
     {
       directions.Add(Vector3.left);
     }
+    else
+    {
+      var randomDir = Random.Range(0, 3);
+      if (randomDir == 0)
+      {
+        directions.Add(Vector3.forward);
+      }
+      else if (randomDir == 1)
+      {
+        directions.Add(Vector3.right);
+      }
+      else if (randomDir == 2)
+      {
+        directions.Add(Vector3.back);
+      }
+      else if (randomDir == 3)
+      {
+        directions.Add(Vector3.left);
+      }
+    }
+
     int item = Random.Range(0, directions.Count);
     entity.ThrownDirection = directions[item];
 
