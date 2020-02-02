@@ -59,8 +59,9 @@ public class CFloor : MonoBehaviour
         }
     }
 
-    public void Interact(CPlayer player)
+    public override void Interact(CPlayer player)
     {
+        base.Interact(player);
         m_player = player;
         if((m_player.CurrentPickupable as CMaterial) != null) {
            if((m_player.CurrentPickupable as CMaterial).type == m_logId) {
