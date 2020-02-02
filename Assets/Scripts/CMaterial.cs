@@ -13,23 +13,23 @@ public enum MatList
 
 public class CMaterial : CPickupable
 {
-    [SerializeField]
-    private MatList m_type;
+  [SerializeField]
+  private MatList m_type;
 
-    public MatList type
-    {
-        get { return m_type; }
-    }
+  public MatList type
+  {
+    get { return m_type; }
+  }
 
-//     public void Interact(CPlayer player)
-//     {
-//         if (player.CurrentMaterial != null)
-//         {
-//             player.DropMaterial(this);
-//         }
-//         player.CurrentMaterial = this;
-//         transform.SetParent(player.transform);
-//         transform.position = player.MaterialLocation;
-//         GetComponent<Collider>().enabled = false;
-//     }
+  //     public void Interact(CPlayer player)
+  //     {
+  //         if (player.CurrentMaterial != null)
+  //         {
+  //             player.DropMaterial(this);
+  //         }
+  //         player.CurrentMaterial = this;
+  //         transform.SetParent(player.transform);
+  //         transform.position = player.MaterialLocation;
+  //         GetComponent<Collider>().enabled = false;
+  //     }
 }

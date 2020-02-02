@@ -68,6 +68,7 @@ public class CComponent : CInteractable
 
   public override void Interact(CPlayer player)
   {
+    base.Interact(player);
     m_player = player;
     if (Vector3.Distance(m_player.transform.position, transform.position) > m_interactRange)
     {
