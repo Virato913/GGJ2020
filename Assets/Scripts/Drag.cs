@@ -45,7 +45,7 @@ public class Drag : MonoBehaviour
             if (IsOn == 1)
             {
                // transform.position = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                transform.position = mousePos;
+                transform.position = new Vector3(mousePos.x, mousePos.y , transform.position.z);
 
             }
             if (Input.GetMouseButtonUp(0))

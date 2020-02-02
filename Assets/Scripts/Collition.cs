@@ -13,8 +13,16 @@ public class Collition : MonoBehaviour
         SizeTwo = TeSize(other);
         if (Size == SizeTwo)
         {
-          other.transform.position = Vector2.Lerp(transform.position, new Vector2(20, 20), 4 * Time.fixedDeltaTime);
+            Vector3 newPos;
+            newPos = Vector2.Lerp(other.transform.position, transform.position, 4 * Time.fixedDeltaTime);
+            newPos.z = 980;
+            other.transform.position = newPos;
+        }
 
+        Debug.Log(Vector3.Distance(other.transform.position, transform.position));
+        if (Vector2.Distance(other.transform.position, transform.position) < 2.0f)
+        {
+            CSceneManager.LoadBobScene();
         }
 
     }

@@ -69,6 +69,7 @@ public class CComponent : CInteractable
                 CSceneManager.LoadFloorGame();
                 break;
             case TOOL_TYPES.GEAR:
+                CSceneManager.LoadGearGame();
                 break;
             case TOOL_TYPES.PIPE:
                 CSceneManager.LoadPipeGame();

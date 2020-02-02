@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/minigames/smashearclavos.unity
     guid: a581e156e65f8d849b53925106c05a88
+  - enabled: 1
+    path: Assets/Scenes/Gear.unity
+    guid: f24bdc343485d004fb48ad60265b8ee4
   m_configObjects: {}

@@ -86,6 +86,12 @@ public class CSceneManager : MonoBehaviour
         CSingleton.instance.gameObject.SetActive(false);
     }
 
+    public static void LoadGearGame()
+    {
+        SceneManager.LoadScene("Gear");
+        CSingleton.instance.gameObject.SetActive(false);
+    }
+
     public static void Restar()
     {
         //SceneManager.LoadScene("placasoldada");
