@@ -27,6 +27,7 @@ public class stabla : MonoBehaviour
         if (cuantos == 4)
         {
             end = true;
+            CSceneManager.LoadBobScene();
         }
     }
 }

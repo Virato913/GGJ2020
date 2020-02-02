@@ -4,5 +4,20 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/BobScene.unity
+    guid: d95b99ef00c306f4d8a3f5d2519939ce
+  - enabled: 1
+    path: Assets/Scenes/minigames/coservela.unity
+    guid: c8bcb9a1e9c147d4c94c839d799e4564
+  - enabled: 1
+    path: Assets/Scenes/minigames/conectuberias.unity
+    guid: 96bffc56edf0b8c4fb14751c9c0ba9e5
+  - enabled: 1
+    path: Assets/Scenes/minigames/placasoldada.unity
+    guid: 3e7286736e3b60748a7b07738bc73cb5
+  - enabled: 1
+    path: Assets/Scenes/minigames/smashearclavos.unity
+    guid: a581e156e65f8d849b53925106c05a88
   m_configObjects: {}
