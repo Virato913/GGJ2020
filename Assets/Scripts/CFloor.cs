@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CFloor : MonoBehaviour
+public class CFloor : CInteractable
 {
-     public GameObject[] m_floor; //all cells of floor prefab
+  public GameObject[] m_floor; //all cells of floor prefab
 
     public float m_destroyTimeCounter; //timing counter for destroying object
     public float m_appearMaterialCounter; // timing counter for spawning materials
@@ -59,17 +57,19 @@ public class CFloor : MonoBehaviour
         }
     }
 
-    public override void Interact(CPlayer player)
+  public override void Interact(CPlayer player)
+  {
+    base.Interact(player);
+    m_player = player;
+    if ((m_player.CurrentPickupable as CMaterial) != null)
     {
-        base.Interact(player);
-        m_player = player;
-        if((m_player.CurrentPickupable as CMaterial) != null) {
-           if((m_player.CurrentPickupable as CMaterial).type == m_logId) {
-                m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = true;
-                m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = false;
-            }
-        }
+      if ((m_player.CurrentPickupable as CMaterial).type == m_logId)
+      {
+        m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = true;
+        m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = false;
+      }
     }
+  }
 
     void generateRandomMaterials()
     {

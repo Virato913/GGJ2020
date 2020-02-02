@@ -167,14 +167,10 @@ public class CPlayer : MonoBehaviour
       // Does the ray intersect any objects excluding the player layer
       if (Physics.Raycast(collider.bounds.center, m_direction, out hit, m_interactRange))
       {
-        if (hit.collider.gameObject.GetComponent<CBob>() != null)
+        var obj = hit.collider.gameObject.GetComponent<CInteractable>();
+        if (obj != null)
         {
-          hit.collider.gameObject.GetComponent<CBob>().Interact(this);
-          EndInteract();
-        }
-        if (hit.collider.gameObject.GetComponent<CPickupable>() != null)
-        {
-          hit.collider.gameObject.GetComponent<CPickupable>().Interact(this);
+          obj.Interact(this);
           EndInteract();
         }
         Debug.Log("Did Hit");
