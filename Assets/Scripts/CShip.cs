@@ -52,10 +52,10 @@ public class CShip : MonoBehaviour
     m_allComponentsBroken = CheckAllComponentsBroken();
     ApplyDamage(); //apply damage over second 
 
-    if (Input.anyKeyDown)
-    {
-      m_life = -10;
-    }
+    //if (Input.anyKeyDown)
+    //{
+    //  m_life = -10;
+    //}
 
     if (m_life < 0.0f)
     {
