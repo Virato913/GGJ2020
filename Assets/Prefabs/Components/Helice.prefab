@@ -251,7 +251,7 @@ MonoBehaviour:
   m_functioning: 0
   m_broken: 0
   m_fixed: 0
-  m_interactRange: 17
+  m_interactRange: 55
   m_toolID: 1
 --- !u!65 &5601592471738798212
 BoxCollider:

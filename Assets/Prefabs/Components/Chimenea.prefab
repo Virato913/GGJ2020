@@ -113,7 +113,7 @@ MonoBehaviour:
   m_functioning: 0
   m_broken: 0
   m_fixed: 0
-  m_interactRange: 7
+  m_interactRange: 35
   m_toolID: 3
 --- !u!1 &8115803889589671039
 GameObject:
