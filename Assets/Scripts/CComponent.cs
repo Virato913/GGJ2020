@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CComponent : MonoBehaviour
+public class CComponent : CInteractable
 {
 
     public float m_fixTime; //maximun time for the player to complete the minigame
@@ -11,29 +9,37 @@ public class CComponent : MonoBehaviour
     public bool m_functioning; //if this component is functioning
     public bool m_broken; //if this component is broken
     public bool m_fixed; //temporary bool simulating the minigame win/lose outcome
+    Canvas m_warningUI;
 
-    private float m_interactRange = 4.0f;
+    public float m_interactRange = 4.0f;
     CPlayer m_player = null;
     public TOOL_TYPES m_toolID;
     //possible reference to minigame
     // Start is called before the first frame update
-    void Start() 
+    void Start()
     {
         m_fixed = false;
         m_fixing = false;
         m_broken = false;
         m_functioning = true;
+        m_warningUI = transform.Find("Canvas").GetComponent<Canvas>();
+        m_warningUI.enabled = false;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if( (!m_functioning && !m_broken) && !m_fixing) //if this component is broken and not repairing, start the count to the player to try fix it
+        if ((!m_functioning && !m_broken) && !m_fixing) //if this component is broken and not repairing, start the count to the player to try fix it
         {
             m_timeCount += Time.fixedDeltaTime;
+            m_warningUI.enabled = true;
+        }
+        else
+        {
+            m_warningUI.enabled = false;
         }
 
-        if(!m_broken && ( m_timeCount > m_fixTime )) //if the time count exceeds the fix time duration, this component is broken, causing damage per second
+        if (!m_broken && (m_timeCount > m_fixTime)) //if the time count exceeds the fix time duration, this component is broken, causing damage per second
         {
             m_timeCount = 0;
             m_functioning = false;
@@ -42,7 +48,7 @@ public class CComponent : MonoBehaviour
             m_broken = true;
         }
 
-        if(m_fixed == true) //if fixed all states go back to normality
+        if (m_fixed == true) //if fixed all states go back to normality
         {
             m_timeCount = 0;
             m_fixing = false;
@@ -50,10 +56,10 @@ public class CComponent : MonoBehaviour
             m_broken = false;
             m_functioning = true;
         }
-        
+
     }
 
-   public void temporaryFix() //call this function when the player needs to stop the counter but dont have the tool to repair it
+    public void temporaryFix() //call this function when the player needs to stop the counter but dont have the tool to repair it
     {
         m_fixing = true; //the counter is only stopped when m_fixing is true
     }
@@ -68,28 +74,33 @@ public class CComponent : MonoBehaviour
         return m_toolID;
     }
 
-    public void interact(CPlayer player)
+    public override void Interact(CPlayer player)
     {
+        base.Interact(player);
         m_player = player;
+        Debug.Log(Vector3.Distance(m_player.transform.position, transform.position));
         if (Vector3.Distance(m_player.transform.position, transform.position) > m_interactRange)
         {
             m_player = null;
-            if(m_fixing == true)
+            if (m_fixing == true)
             {
-               m_fixing = false;
-
-
+                m_fixing = false;
             }
         }
         else
         {
-            if (player.CurrentTool.m_type == m_toolID)
+            if ((player.CurrentPickupable as CTool) != null)
             {
-                repair();
-            }
-            else
-            {
-                temporaryFix();
+                if (((CTool)player.CurrentPickupable).m_type == m_toolID)
+                {
+                    repair();
+                    Destroy(m_player.CurrentPickupable.gameObject);
+                    m_player.CurrentPickupable = null;
+                }
+                else
+                {
+                    temporaryFix();
+                }
             }
         }
     }

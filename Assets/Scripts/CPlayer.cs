@@ -25,18 +25,15 @@ public class CPlayer : MonoBehaviour
   /// <summary>
   /// 
   /// </summary>
-  private CMaterial m_currentMaterial = null;
-
-  /// <summary>
-  /// 
-  /// </summary>
-  private CTool m_currentTool = null;
+  private CPickupable m_currentPickupable = null;
 
   /// <summary>
   /// 
   /// </summary>
   [SerializeField]
   private Vector3 m_direction = new Vector3(0.0f, 0.0f, -1.0f);
+
+  internal Vector3 m_moveDirection = new Vector3(0.0f, 0.0f, 0.0f);
 
   /// <summary>
   /// 
@@ -54,6 +51,28 @@ public class CPlayer : MonoBehaviour
   /// </summary>
   [SerializeField]
   private float m_interactRange = 3.0f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  [SerializeField]
+  [Range(0.1f, 1.0f)]
+  private float m_thrownTime = 0.5f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  private float m_thrownElapsedTime = 0.0f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  private Vector3 m_thrownDirection = new Vector3(0.0f, 0.0f, 0.0f);
+
+  ///// <summary>
+  ///// 
+  ///// </summary>
+  //private float m_thrownSpeed = 0.0f;
   #region State Machine
   /// <summary>
   /// 
@@ -79,6 +98,11 @@ public class CPlayer : MonoBehaviour
   /// 
   /// </summary>
   internal CPlayerStunState m_stunState = null;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal CPlayerThrownState m_thrownState = null;
   #endregion
   #endregion
 
@@ -124,12 +148,12 @@ public class CPlayer : MonoBehaviour
     m_materialLocation += m_materialLocalLocation.z * transform.forward;
   }
 
-  public void DropMaterial(CMaterial material)
+  public void DropMaterial(CPickupable material)
   {
-    m_currentMaterial.transform.SetParent(null);
-    m_currentMaterial.transform.position = material.transform.position;
-    m_currentMaterial.GetComponent<Collider>().enabled = true;
-    m_currentMaterial = null;
+    m_currentPickupable.transform.SetParent(null);
+    m_currentPickupable.transform.position = material.transform.position;
+    m_currentPickupable.GetComponent<Collider>().enabled = true;
+    m_currentPickupable = null;
   }
 
   internal void OnInteract()
@@ -143,14 +167,10 @@ public class CPlayer : MonoBehaviour
       // Does the ray intersect any objects excluding the player layer
       if (Physics.Raycast(collider.bounds.center, m_direction, out hit, m_interactRange))
       {
-        if (hit.collider.gameObject.GetComponent<CBob>() != null)
+        var obj = hit.collider.gameObject.GetComponent<CInteractable>();
+        if (obj != null)
         {
-          hit.collider.gameObject.GetComponent<CBob>().Interact(this);
-          EndInteract();
-        }
-        if (hit.collider.gameObject.GetComponent<CMaterial>() != null)
-        {
-          hit.collider.gameObject.GetComponent<CMaterial>().Interact(this);
+          obj.Interact(this);
           EndInteract();
         }
         Debug.Log("Did Hit");
@@ -160,14 +180,19 @@ public class CPlayer : MonoBehaviour
 
   public void BeginInteract()
   {
-    if(!m_isInteracting)
-    m_isInteracting = true;
+    if (!m_isInteracting)
+      m_isInteracting = true;
   }
 
   public void EndInteract()
   {
-    if(m_isInteracting)
-    m_isInteracting = false;
+    if (m_isInteracting)
+      m_isInteracting = false;
+  }
+
+  public void EnterThrownState()
+  {
+    m_stateMachine.ToState(m_thrownState, this);
   }
 
   private void InitStateMachine()
@@ -197,6 +222,11 @@ public class CPlayer : MonoBehaviour
       m_stunState = new CPlayerStunState(m_stateMachine);
     }
 
+    if (m_thrownState == null)
+    {
+      m_thrownState = new CPlayerThrownState(m_stateMachine);
+    }
+
     m_stateMachine.Init(m_idleState, this);
   }
   /// <summary>
@@ -208,13 +238,22 @@ public class CPlayer : MonoBehaviour
     UpdateRotation();
   }
 
+  void Update()
+  {
+    m_stateMachine.OnState(this, false);
+  }
+
   /// <summary>
   /// 
   /// </summary>
   void FixedUpdate()
   {
-    m_stateMachine.OnState(this);
+    m_stateMachine.OnState(this, true);
     UpdateMaterialLocation();
+    if (Input.GetKeyDown(KeyCode.E))
+    {
+      EnterThrownState();
+    }
   }
   #endregion
 
@@ -242,21 +281,38 @@ public class CPlayer : MonoBehaviour
     get { return m_stunElapsedTime; }
   }
 
-  public CMaterial CurrentMaterial
+  public CPickupable CurrentPickupable
   {
-    set { m_currentMaterial = value; }
-    get { return m_currentMaterial; }
-  }
-
-  public CTool CurrentTool
-  {
-    set { m_currentTool = value; }
-    get { return m_currentTool; }
+    set { m_currentPickupable = value; }
+    get { return m_currentPickupable; }
   }
 
   public Vector3 MaterialLocation
   {
     get { return m_materialLocation; }
+  }
+
+  public float ThrownTime
+  {
+    get { return m_thrownTime; }
+  }
+
+  public float ThrownElapsedTime
+  {
+    set { m_thrownElapsedTime = value; }
+    get { return m_thrownElapsedTime; }
+  }
+
+  public Vector3 ThrownDirection
+  {
+    set { m_thrownDirection = value; }
+    get { return m_thrownDirection; }
+  }
+
+  public Vector3 MoveDirection
+  {
+    set { m_moveDirection = value; }
+    get { return m_moveDirection; }
   }
   #endregion
 
