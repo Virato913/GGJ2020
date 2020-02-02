@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-public class CFloor : CInteractable
+public class CFloor : MonoBehaviour
 {
   public GameObject[] m_floor; //all cells of floor prefab
 
@@ -78,20 +78,6 @@ public class CFloor : CInteractable
     if (Vector3.Distance(m_floor[m_randomFloor].transform.position, m_player.transform.position) < 2)
     {
       m_player.EnterThrownState();
-    }
-  }
-
-  public override void Interact(CPlayer player)
-  {
-    base.Interact(player);
-    m_player = player;
-    if ((m_player.CurrentPickupable as CMaterial) != null)
-    {
-      if ((m_player.CurrentPickupable as CMaterial).type == m_logId)
-      {
-        m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = true;
-        m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = false;
-      }
     }
   }
 
