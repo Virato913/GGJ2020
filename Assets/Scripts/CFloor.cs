@@ -11,11 +11,12 @@ public class CFloor : CInteractable
     CMaterial m_randomMaterial; //member to instantiate from a random of the material enum
     public int m_randomFloor;//random floor index
     public MatList m_logId = MatList.Log;
-    public CMaterial[] m_materialList = GameObject.FindObjectsOfType<CMaterial>();
+    public CMaterial[] m_materialList; /*= GameObject.FindObjectsOfType<CMaterial>();*/
     CPlayer m_player = null;
     // Start is called before the first frame update
     void Start()
     {
+        m_materialList = GameObject.FindObjectsOfType<CMaterial>();
         m_floor = GameObject.FindGameObjectsWithTag("floor");
         m_player = GameObject.FindObjectOfType<CPlayer>();
         m_destroyTimeCounter = 0;
