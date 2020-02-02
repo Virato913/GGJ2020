@@ -1,64 +1,136 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.UI;
 
 public class CBob : MonoBehaviour
 {
-  public Canvas m_menu;
-  bool interacting = false;
+    public Canvas m_menu;
+    bool interacting = false;
+    [SerializeField]
+    [Range(5.0f, 10.0f)]
+    private float m_interactRange = 7.0f;
+    CPlayer m_player = null;
 
-  // Start is called before the first frame update
-  void Start()
-  {
-    m_menu = transform.Find("Canvas").GetComponent<Canvas>();
-    m_menu.gameObject.SetActive(false);
-  }
+    static public List<int> m_materialListCount = new List<int> { 0, 0, 0, 0, 0 }; //cloth, log, metal, nail, screw
 
-  // Update is called once per frame
-  void Update()
-  {
-    //Quitar esto cuando ya se peuda interactuar
-    if (Input.GetKeyDown(KeyCode.Alpha0))
+    // Start is called before the first frame update
+    void Start()
     {
-      if (interacting)
-      {
-        StopInteractiong();
-      }
-      else
-      {
-        Interact();
-      }
-    }
-  }
-
-  public void Interact()
-  {
-    interacting = true;
-    m_menu.gameObject.SetActive(true);
-    Debug.Log("Interactuando con Bob. Hola amigos.");
-  }
-
-  void StopInteractiong()
-  {
-    interacting = false;
-    m_menu.gameObject.SetActive(false);
-  }
-
-  public static void CheckMaterialsNeeded(CTool m_ToolInProgress)
-  {
-    int totalMaterialsNeeded = 0;
-    for (int i = 0; i < m_ToolInProgress.m_materialListCount.Count; i++)
-    {
-      totalMaterialsNeeded += m_ToolInProgress.m_materialListCount[i];
+        m_menu = transform.Find("Canvas").GetComponent<Canvas>();
+        m_menu.gameObject.SetActive(false);
     }
 
-    if (totalMaterialsNeeded <= 0)
+    // Update is called once per frame
+    void Update()
     {
-      m_ToolInProgress = null;
-      //give material
+        if (m_player != null)
+        {
+            if (Vector3.Distance(m_player.transform.position, transform.position) > m_interactRange)
+            {
+                m_player = null;
+                CloseMenu();
+            }
+        }
     }
-    Debug.Log("Materiales restantes: " + totalMaterialsNeeded);
-  }
+
+    public void Interact(CPlayer player)
+    {
+        //if (interacting)
+        //{
+        //    CloseMenu();
+        //}
+        //else
+        //{
+        m_player = player;
+
+        if (m_player.CurrentPickupable != null && (m_player.CurrentPickupable as CMaterial) != null)
+        {
+            m_materialListCount[(int)((CMaterial)m_player.CurrentPickupable).type]++;
+            Destroy(m_player.CurrentPickupable.gameObject);
+            m_player.CurrentPickupable = null;
+        }
+
+        OpenMenu();
+        //}
+
+        Debug.Log("Interactuando con Bob. Hola amigos.");
+    }
+
+    void OpenMenu()
+    {
+        interacting = true;
+        m_menu.gameObject.SetActive(true);
+    }
+
+    void CloseMenu()
+    {
+        interacting = false;
+        m_menu.gameObject.SetActive(false);
+    }
+
+
+    public static void CheckMaterialsNeeded(CTool m_ToolInProgress)
+    {
+        /*
+        int totalMaterialsNeeded = 0;
+        for (int i = 0; i < m_ToolInProgress.m_materialListCount.Count; i++)
+        {
+            totalMaterialsNeeded += m_ToolInProgress.m_materialListCount[i];
+        }
+
+
+        if (totalMaterialsNeeded <= 0)
+        {
+            m_ToolInProgress = null;
+            //give material
+        }
+        Debug.Log("Materiales restantes: " + totalMaterialsNeeded);
+        */
+
+        bool hasAll = false;
+        for (int i = 0; i < CBob.m_materialListCount.Count; i++)
+        {
+            for (int e = 0; e < m_ToolInProgress.m_materialList.Count; e++)
+            {
+                if (i == (int)m_ToolInProgress.m_materialList[e])
+                {
+                    if (CBob.m_materialListCount[i] >= m_ToolInProgress.m_materialListCount[e])
+                    {
+                        CBob.m_materialListCount[i] -= m_ToolInProgress.m_materialListCount[e];
+                        hasAll = true;
+                    }
+                    else
+                    {
+                        hasAll = false;
+                    }
+                }
+            }
+        }
+
+        if (hasAll == true)
+        {
+            Debug.Log("All materials in inventory");
+            Instantiate(m_ToolInProgress, GameObject.Find("BobTable").transform.position + new Vector3(0,1,0), Quaternion.identity);
+        }
+
+    }
+
+#if UNITY_EDITOR
+    public void OnDrawGizmos()
+    {
+        var collider = GetComponent<Collider>();
+        Gizmos.color = Color.yellow;
+        if (collider == null)
+        {
+            Gizmos.DrawWireSphere(transform.position, m_interactRange);
+        }
+        else
+        {
+            Gizmos.DrawWireSphere(collider.bounds.center, m_interactRange);
+        }
+    }
+#endif
 
 }

@@ -8,6 +8,10 @@
   base(stateMachine)
   { }
 
+  /// <summary>
+  /// 
+  /// </summary>
+  /// <param name="entity"></param>
   public override void OnStateEnter(CPlayer entity)
   {
     base.OnStateEnter(entity);
@@ -18,11 +22,14 @@
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStatePostUpdate(CPlayer entity)
+  public override void OnStatePostUpdate(CPlayer entity, bool fixedUpdate = true)
   {
-    if (entity.StunElapsedTime >= entity.StunDuration)
+    if (fixedUpdate)
     {
-      m_stateMachine.ToState(entity.m_idleState, entity);
+      if (entity.StunElapsedTime >= entity.StunDuration)
+      {
+        m_stateMachine.ToState(entity.m_idleState, entity);
+      }
     }
   }
 
@@ -30,8 +37,11 @@
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStateUpdate(CPlayer entity)
+  public override void OnStateUpdate(CPlayer entity, bool fixedUpdate = true)
   {
-    entity.StunElapsedTime += UnityEngine.Time.fixedDeltaTime;
+    if (fixedUpdate)
+    {
+      entity.StunElapsedTime += UnityEngine.Time.fixedDeltaTime;
+    }
   }
 }

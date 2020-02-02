@@ -11,9 +11,9 @@ public abstract class CState<T>
     Debug.Log(entity.ToString() + " entered " + this.ToString());
   }
 
-  public abstract void OnStatePostUpdate(T entity);
+  public abstract void OnStatePostUpdate(T entity, bool fixedUpdate = true);
 
-  public abstract void OnStateUpdate(T entity);
+  public abstract void OnStateUpdate(T entity, bool fixedUpdate = true);
 
   public virtual void OnStateExit(T entity) { }
 

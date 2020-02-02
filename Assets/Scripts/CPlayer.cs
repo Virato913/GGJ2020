@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
 public class CPlayer : MonoBehaviour
 {
   #region Members
@@ -26,22 +25,54 @@ public class CPlayer : MonoBehaviour
   /// <summary>
   /// 
   /// </summary>
-  private CMaterial m_currentMaterial = null;
+  private CPickupable m_currentPickupable = null;
 
   /// <summary>
   /// 
   /// </summary>
-  private CTool m_currentTool = null;
+  [SerializeField]
+  private Vector3 m_direction = new Vector3(0.0f, 0.0f, -1.0f);
+
+  internal Vector3 m_moveDirection = new Vector3(0.0f, 0.0f, 0.0f);
 
   /// <summary>
   /// 
   /// </summary>
-  internal Vector2 m_direction = new Vector2(0.0f, -1.0f);
+  [SerializeField]
+  private Vector3 m_materialLocalLocation = new Vector3(0.0f, 0.0f, 0.0f);
+
+  private float m_materialLocalRotation = 0.0f;
+
+  private Vector3 m_materialLocation = new Vector3(0.0f, 0.0f, 0.0f);
+
+  private bool m_isInteracting = false;
+  /// <summary>
+  /// 
+  /// </summary>
+  [SerializeField]
+  private float m_interactRange = 3.0f;
 
   /// <summary>
   /// 
   /// </summary>
-  internal float m_interactRange = 3.0f;
+  [SerializeField]
+  [Range(0.1f, 1.0f)]
+  private float m_thrownTime = 0.5f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  private float m_thrownElapsedTime = 0.0f;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  private Vector3 m_thrownDirection = new Vector3(0.0f, 0.0f, 0.0f);
+
+  ///// <summary>
+  ///// 
+  ///// </summary>
+  //private float m_thrownSpeed = 0.0f;
   #region State Machine
   /// <summary>
   /// 
@@ -67,6 +98,11 @@ public class CPlayer : MonoBehaviour
   /// 
   /// </summary>
   internal CPlayerStunState m_stunState = null;
+
+  /// <summary>
+  /// 
+  /// </summary>
+  internal CPlayerThrownState m_thrownState = null;
   #endregion
   #endregion
 
@@ -75,9 +111,9 @@ public class CPlayer : MonoBehaviour
   /// 
   /// </summary>
   /// <param name="direction"></param>
-  internal void Move(Vector2 direction)
+  internal void Move(Vector3 direction)
   {
-    Vector2 currentPos = transform.position;
+    Vector3 currentPos = transform.position;
 
     currentPos += (direction * Time.fixedDeltaTime * m_moveSpeed);
 
@@ -87,16 +123,80 @@ public class CPlayer : MonoBehaviour
     {
       m_direction = direction;
     }
+
+    UpdateRotation();
   }
 
-  internal void Interact()
+  public void UpdateRotation()
   {
-    RaycastHit2D raycast =
-    Physics2D.Raycast(transform.position, m_direction, m_interactRange);
-    if(raycast.collider.gameObject.GetComponent<CBob>() != null)
+    var rotation = transform.rotation;
+    rotation.eulerAngles =
+      new Vector3(0.0f, Vector3.SignedAngle(Vector3.right, m_direction, Vector3.up) + 90.0f, 0.0f);
+    transform.rotation = rotation;
+  }
+
+  public void UpdateMaterialLocation()
+  {
+    //m_materialLocalRotation = transform.rotation.eulerAngles.y;
+    //Vector3 localLocation = m_materialLocalLocation - transform.position;
+    //Vector3.RotateTowards(localLocation, m_direction,
+    // Mathf.Deg2Rad * Vector3.Angle(m_materialLocalLocation, m_direction), 10.0f);
+
+    m_materialLocation = transform.position;
+    m_materialLocation += m_materialLocalLocation.x * transform.right.normalized;
+    m_materialLocation += m_materialLocalLocation.y * transform.up.normalized;
+    m_materialLocation += m_materialLocalLocation.z * transform.forward;
+  }
+
+  public void DropMaterial(CPickupable material)
+  {
+    m_currentPickupable.transform.SetParent(null);
+    m_currentPickupable.transform.position = material.transform.position;
+    m_currentPickupable.GetComponent<Collider>().enabled = true;
+    m_currentPickupable = null;
+  }
+
+  internal void OnInteract()
+  {
+    if (m_isInteracting)
     {
-      raycast.collider.gameObject.GetComponent<CBob>().Interact();
+      var collider = GetComponent<Collider>();
+
+      RaycastHit hit;
+      Debug.DrawRay(collider.bounds.center, m_direction * m_interactRange, Color.red);
+      // Does the ray intersect any objects excluding the player layer
+      if (Physics.Raycast(collider.bounds.center, m_direction, out hit, m_interactRange))
+      {
+        if (hit.collider.gameObject.GetComponent<CBob>() != null)
+        {
+          hit.collider.gameObject.GetComponent<CBob>().Interact(this);
+          EndInteract();
+        }
+        if (hit.collider.gameObject.GetComponent<CPickupable>() != null)
+        {
+          hit.collider.gameObject.GetComponent<CPickupable>().Interact(this);
+          EndInteract();
+        }
+        Debug.Log("Did Hit");
+      }
     }
+  }
+
+  public void BeginInteract()
+  {
+    if (!m_isInteracting)
+      m_isInteracting = true;
+  }
+
+  public void EndInteract()
+  {
+    if (m_isInteracting)
+      m_isInteracting = false;
+  }
+
+  public void EnterThrownState()
+  {
+    m_stateMachine.ToState(m_thrownState, this);
   }
 
   private void InitStateMachine()
@@ -126,6 +226,11 @@ public class CPlayer : MonoBehaviour
       m_stunState = new CPlayerStunState(m_stateMachine);
     }
 
+    if (m_thrownState == null)
+    {
+      m_thrownState = new CPlayerThrownState(m_stateMachine);
+    }
+
     m_stateMachine.Init(m_idleState, this);
   }
   /// <summary>
@@ -134,6 +239,12 @@ public class CPlayer : MonoBehaviour
   void Start()
   {
     InitStateMachine();
+    UpdateRotation();
+  }
+
+  void Update()
+  {
+    m_stateMachine.OnState(this, false);
   }
 
   /// <summary>
@@ -141,12 +252,17 @@ public class CPlayer : MonoBehaviour
   /// </summary>
   void FixedUpdate()
   {
-    m_stateMachine.OnState(this);
+    m_stateMachine.OnState(this, true);
+    UpdateMaterialLocation();
+    if (Input.GetKeyDown(KeyCode.E))
+    {
+      EnterThrownState();
+    }
   }
   #endregion
 
   #region Properties
-  public Vector2 Direction
+  public Vector3 Direction
   {
     set { m_direction = value; }
     get { return m_direction; }
@@ -168,14 +284,53 @@ public class CPlayer : MonoBehaviour
     set { m_stunElapsedTime = value; }
     get { return m_stunElapsedTime; }
   }
+
+  public CPickupable CurrentPickupable
+  {
+    set { m_currentPickupable = value; }
+    get { return m_currentPickupable; }
+  }
+
+  public Vector3 MaterialLocation
+  {
+    get { return m_materialLocation; }
+  }
+
+  public float ThrownTime
+  {
+    get { return m_thrownTime; }
+  }
+
+  public float ThrownElapsedTime
+  {
+    set { m_thrownElapsedTime = value; }
+    get { return m_thrownElapsedTime; }
+  }
+
+  public Vector3 ThrownDirection
+  {
+    set { m_thrownDirection = value; }
+    get { return m_thrownDirection; }
+  }
+
+  public Vector3 MoveDirection
+  {
+    set { m_moveDirection = value; }
+    get { return m_moveDirection; }
+  }
   #endregion
 
   #region Gizmos
 #if UNITY_EDITOR
   private void OnDrawGizmos()
   {
+    UpdateMaterialLocation();
+
     Gizmos.color = Color.blue;
-    Gizmos.DrawLine(transform.position, transform.position + (Vector3)m_direction * InteractRange);
+    Gizmos.DrawLine(transform.position, transform.position + m_direction * InteractRange);
+
+    Gizmos.color = Color.magenta;
+    Gizmos.DrawSphere(m_materialLocation, 0.2f);
   }
 #endif
   #endregion
