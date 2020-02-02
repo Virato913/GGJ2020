@@ -23,7 +23,7 @@ public class splaka : MonoBehaviour
             end = true;
             win = false;
         }
-        if(perimetro == 45)
+        if(perimetro == 40)
         {
             end = true;
         }
