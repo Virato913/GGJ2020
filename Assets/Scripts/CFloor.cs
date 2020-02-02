@@ -55,11 +55,15 @@ public class CFloor : MonoBehaviour
     if (m_appearMaterialCounter > m_randomAppearMaterialTime)
     {
       var index = Random.Range(0, m_floor.Length);
-      var floorTile = m_floor[index].GetComponent<CFloorTile>();
-      if (floorTile.CanSpawn)
+      var floor = m_floor[index];
+      if (floor.GetComponent<MeshRenderer>().enabled)
       {
-        m_appearMaterialCounter = 0.0f;
-        floorTile.SpawnMaterial(m_materialList[Random.Range(0, m_materialList.Count)]);
+        var floorTile = floor.GetComponent<CFloorTile>();
+        if (floorTile.CanSpawn)
+        {
+          m_appearMaterialCounter = 0.0f;
+          floorTile.SpawnMaterial(m_materialList[Random.Range(0, m_materialList.Count)]);
+        }
       }
       //m_appearMaterialCounter = 0;
       //m_randomAppearMaterialTime = Random.Range(5, 9);

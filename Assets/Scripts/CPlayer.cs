@@ -150,10 +150,24 @@ public class CPlayer : MonoBehaviour
 
   public void DropMaterial(CPickupable material)
   {
-    m_currentPickupable.transform.SetParent(null);
-    m_currentPickupable.transform.position = material.transform.position;
-    m_currentPickupable.GetComponent<Collider>().enabled = true;
-    m_currentPickupable = null;
+    if (m_currentPickupable != null)
+    {
+      m_currentPickupable.transform.SetParent(null);
+      m_currentPickupable.transform.position = material.transform.position;
+      m_currentPickupable.GetComponent<Collider>().enabled = true;
+      m_currentPickupable = null;
+    }
+  }
+
+  public void DropMaterial()
+  {
+    if (m_currentPickupable != null)
+    {
+      m_currentPickupable.transform.SetParent(null);
+      m_currentPickupable.transform.position = transform.position;
+      m_currentPickupable.GetComponent<Collider>().enabled = true;
+      m_currentPickupable = null;
+    }
   }
 
   internal void OnInteract()

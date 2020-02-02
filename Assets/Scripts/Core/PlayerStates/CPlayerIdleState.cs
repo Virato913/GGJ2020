@@ -45,6 +45,11 @@ public class CPlayerIdleState : CState<CPlayer>
       {
         entity.EndInteract();
       }
+
+      if (Input.GetButtonDown("Fire3"))
+      {
+        entity.DropMaterial();
+      }
     }
   }
 }
