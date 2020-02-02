@@ -19,7 +19,7 @@ public class CShip : MonoBehaviour
   {
     m_life = 100;
     m_destructiontimer = 0;
-    m_timeToDestroy = Random.Range(4, 7);
+    m_timeToDestroy = Random.Range(7, 15);
     m_allComponentsBroken = false;
     m_componentsBroken = 0;
     m_damageMultiplier = 1;

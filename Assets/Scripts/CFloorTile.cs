@@ -43,7 +43,7 @@ public class CFloorTile : CInteractable
   {
     if(m_currentMaterial == null)
     {
-      m_currentMaterial = Instantiate(material, m_LocalSpawnLocation + transform.position, Quaternion.identity);
+      m_currentMaterial = Instantiate(material, m_LocalSpawnLocation + transform.position + new Vector3(0,-0.8f,0), Quaternion.identity);
     }
   }
 

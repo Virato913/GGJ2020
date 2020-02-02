@@ -7,7 +7,7 @@ public class CPlayer : MonoBehaviour
   /// 
   /// </summary>
   [SerializeField]
-  [Range(1.0f, 10.0f)]
+  [Range(1.0f, 30.0f)]
   private float m_moveSpeed = 1.0f;
 
   /// <summary>

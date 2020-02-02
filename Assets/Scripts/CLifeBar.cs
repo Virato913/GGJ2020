@@ -24,6 +24,8 @@ public class CLifeBar : MonoBehaviour
         {
             Color color = Color.white;
             m_slider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = color;
+            CSceneManager.LoadStartScene();
+            Destroy(CSingleton.instance.gameObject);
         }
     }
 }

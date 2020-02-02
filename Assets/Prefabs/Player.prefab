@@ -59,10 +59,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41316d4a7205dd94582e674e6cbeec14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_moveSpeed: 10
+  m_moveSpeed: 15
   m_stunDuration: 5
   m_direction: {x: 0, y: 0, z: -1}
+  m_materialLocalLocation: {x: 0, y: 0, z: 0}
   m_interactRange: 3
+  m_thrownTime: 0.5
 --- !u!54 &5783537673101813988
 Rigidbody:
   m_ObjectHideFlags: 0

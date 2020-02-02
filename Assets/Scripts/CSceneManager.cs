@@ -25,17 +25,23 @@ public class CSceneManager : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         if (scene.buildIndex != 0)
         {
-            CSingleton.instance.gameObject.SetActive(false);
+            if (CSingleton.instance != null)
+            {
+                CSingleton.instance.gameObject.SetActive(false);
+            }
         }
         else if(scene.buildIndex == 0)
         {
-            CSingleton.instance.gameObject.SetActive(true);
+            if (CSingleton.instance != null)
+            {
+                CSingleton.instance.gameObject.SetActive(true);
+            }
         }
 
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SceneManager.LoadScene("BobScene");
+            SceneManager.LoadScene("MainScene");
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -64,7 +70,13 @@ public class CSceneManager : MonoBehaviour
 
     public static void LoadBobScene()
     {
-        SceneManager.LoadScene("BobScene");
+        SceneManager.LoadScene("MainScene");
+        CSingleton.instance.gameObject.SetActive(true);
+    }
+
+    public static void LoadStartScene()
+    {
+        SceneManager.LoadScene("menu de inicio");
         CSingleton.instance.gameObject.SetActive(true);
     }
 

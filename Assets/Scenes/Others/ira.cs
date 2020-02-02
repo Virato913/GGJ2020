@@ -12,7 +12,7 @@ public class ira : MonoBehaviour
     }
     public void go()
     {
-        SceneManager.LoadScene(level);
+        CSceneManager.LoadBobScene();
     }
     // Update is called once per frame
     void Update()
