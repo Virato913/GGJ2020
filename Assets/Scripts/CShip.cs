@@ -31,7 +31,7 @@ public class CShip : MonoBehaviour
     m_damageMultiplier = 1;
     m_shipComponents = FindObjectsOfType<CComponent>();
     m_floor = FindObjectOfType<CFloor>();
-    //m_loseText.enabled = false;
+    m_loseText.enabled = false;
   }
 
   // Update is called once per frame
@@ -64,7 +64,7 @@ public class CShip : MonoBehaviour
       var player = GameObject.FindGameObjectWithTag("Player");
 
       //var loseText = GetComponentInChildren<Text>();
-      //m_loseText.enabled = true;
+      m_loseText.enabled = true;
     }
 
     if (m_gameOver)
