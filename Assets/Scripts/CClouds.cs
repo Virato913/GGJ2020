@@ -39,7 +39,7 @@ public class CClouds : MonoBehaviour{
         //If cloud is off Screen, Destroy it.
         if (transform.position.x - buffer > camWidth){
 
-            //Destroy(gameObject);
+            transform.position = new Vector3(-camWidth - buffer, Random.Range(minY, maxY), transform.position.z);
         }
     }
 }
