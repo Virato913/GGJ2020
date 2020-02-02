@@ -76,13 +76,15 @@ public class CFloor : MonoBehaviour
   {
     m_randomFloor = Random.Range(0, m_floor.Length);
 
-    m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = false;
-    m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = true;
+    m_floor[m_randomFloor].GetComponent<CFloorTile>().TimeToDestroy = m_randomDestroyTime;
 
-    if (Vector3.Distance(m_floor[m_randomFloor].transform.position, m_player.transform.position) < 2)
-    {
-      m_player.EnterThrownState();
-    }
+    //m_floor[m_randomFloor].GetComponent<MeshRenderer>().enabled = false;
+    //m_floor[m_randomFloor].GetComponent<BoxCollider>().enabled = true;
+    //
+    //if (Vector3.Distance(m_floor[m_randomFloor].transform.position, m_player.transform.position) < 2)
+    //{
+    //  m_player.EnterThrownState();
+    //}
   }
 
   void generateRandomMaterials()
