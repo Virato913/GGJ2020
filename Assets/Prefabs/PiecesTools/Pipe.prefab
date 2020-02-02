@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d9a519be278844e88ceb75b3bcfa16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_type: 0
+  m_type: 2
   m_name: Pipe
   m_materialList: 02000000
   m_materialListCount: 01000000
