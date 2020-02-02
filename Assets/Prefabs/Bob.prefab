@@ -151,6 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_menu: {fileID: 8646799858520577596}
   m_interactRange: 7
+  m_materialListCount: 0000000000000000000000000000000000000000
 --- !u!65 &2212250420294770046
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -162,8 +163,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.0717762, y: 4.1846046, z: 3.298872}
-  m_Center: {x: 0.08369386, y: 1.2036304, z: -0.806098}
+  m_Size: {x: 3.0717762, y: 4.1846046, z: 1.979208}
+  m_Center: {x: 0.08369386, y: 1.2036304, z: -0.14626598}
 --- !u!1001 &1492400859999234636
 PrefabInstance:
   m_ObjectHideFlags: 0

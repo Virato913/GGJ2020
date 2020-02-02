@@ -125,6 +125,7 @@ public class CBob : CInteractable
             Debug.Log("All materials in inventory");
             var pickable = Instantiate(m_ToolInProgress, GameObject.Find("BobTable").transform.position + new Vector3(0, 1, 0), Quaternion.identity);
             pickable.Interact(m_player);
+            CloseMenu();
         }
 
     }
