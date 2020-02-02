@@ -57,6 +57,7 @@ public class CFloorTile : CInteractable
         GetComponent<MeshRenderer>().enabled = true;
         GetComponent<BoxCollider>().enabled = false;
         Destroy(player.CurrentPickupable.gameObject);
+        CSceneManager.LoadFloorGame();
       }
     }
   }
