@@ -58,6 +58,11 @@ public class CPlayerMoveState : CState<CPlayer>
       {
         entity.EndInteract();
       }
+
+      if (Input.GetButtonDown("Fire3"))
+      {
+        entity.DropMaterial();
+      }
     }
   }
 }
