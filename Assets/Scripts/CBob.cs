@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.UI;
 
 public class CBob : MonoBehaviour
@@ -44,11 +45,11 @@ public class CBob : MonoBehaviour
         //{
         m_player = player;
 
-        if (m_player.CurrentMaterial != null)
+        if (m_player.CurrentPickupable != null && (m_player.CurrentPickupable as CMaterial) != null)
         {
-            m_materialListCount[(int)m_player.CurrentMaterial.type]++;
-            Destroy(m_player.CurrentMaterial.gameObject);
-            m_player.CurrentMaterial = null;
+            m_materialListCount[(int)((CMaterial)m_player.CurrentPickupable).type]++;
+            Destroy(m_player.CurrentPickupable.gameObject);
+            m_player.CurrentPickupable = null;
         }
 
         OpenMenu();

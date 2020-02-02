@@ -11,7 +11,7 @@ public enum MatList
     Screw
 }
 
-public class CMaterial : MonoBehaviour
+public class CMaterial : CPickupable
 {
     [SerializeField]
     private MatList m_type;
@@ -21,15 +21,15 @@ public class CMaterial : MonoBehaviour
         get { return m_type; }
     }
 
-    public void Interact(CPlayer player)
-    {
-        if (player.CurrentMaterial != null)
-        {
-            player.DropMaterial(this);
-        }
-        player.CurrentMaterial = this;
-        transform.SetParent(player.transform);
-        transform.position = player.MaterialLocation;
-        GetComponent<Collider>().enabled = false;
-    }
+//     public void Interact(CPlayer player)
+//     {
+//         if (player.CurrentMaterial != null)
+//         {
+//             player.DropMaterial(this);
+//         }
+//         player.CurrentMaterial = this;
+//         transform.SetParent(player.transform);
+//         transform.position = player.MaterialLocation;
+//         GetComponent<Collider>().enabled = false;
+//     }
 }
