@@ -10,9 +10,11 @@ public class CPieceButton : MonoBehaviour
     Text m_PieceName;
     Text m_materialList;
     public CTool m_tool;
+    CBob m_Bob;
     // Start is called before the first frame update
     void Start()
     {
+        m_Bob = GameObject.Find("Bob").GetComponent<CBob>();
         m_tool = Instantiate(m_tool);
 
         m_button = transform.Find("Button").GetComponent<Button>();
@@ -25,7 +27,7 @@ public class CPieceButton : MonoBehaviour
         m_materialList.text = "";
         for (int i = 0; i < m_tool.m_materialListCount.Count; i++)
         {
-            m_materialList.text += CBob.m_materialListCount[i].ToString() + "/" + m_tool.m_materialListCount[i].ToString() + " " + m_tool.m_materialList[i].ToString() + "\n";
+            m_materialList.text += m_Bob.m_materialListCount[i].ToString() + "/" + m_tool.m_materialListCount[i].ToString() + " " + m_tool.m_materialList[i].ToString() + "\n";
         }
 
     }
@@ -38,19 +40,19 @@ public class CPieceButton : MonoBehaviour
 
     void TaskOnClick()
     {
-        CBob.CheckMaterialsNeeded(m_tool);
+        m_Bob.CheckMaterialsNeeded(m_tool);
     }
 
     void UpdateData()
     {
         m_materialList.text = "";
-        for (int i = 0; i < CBob.m_materialListCount.Count; i++)
+        for (int i = 0; i < m_Bob.m_materialListCount.Count; i++)
         {
             for (int e = 0; e < m_tool.m_materialList.Count; e++)
             {
                 if (i == (int)m_tool.m_materialList[e])
                 {
-                    m_materialList.text += CBob.m_materialListCount[i].ToString() + "/" + m_tool.m_materialListCount[e].ToString() + " " + m_tool.m_materialList[e].ToString() + "\n";
+                    m_materialList.text += m_Bob.m_materialListCount[i].ToString() + "/" + m_tool.m_materialListCount[e].ToString() + " " + m_tool.m_materialList[e].ToString() + "\n";
                 }
             }
         }

@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
-using UnityEngine.UI;
 
-public class CBob : MonoBehaviour
+public class CBob : CInteractable
 {
     public Canvas m_menu;
     bool interacting = false;
@@ -13,7 +10,7 @@ public class CBob : MonoBehaviour
     private float m_interactRange = 7.0f;
     CPlayer m_player = null;
 
-    static public List<int> m_materialListCount = new List<int> { 0, 0, 0, 0, 0 }; //cloth, log, metal, nail, screw
+    public List<int> m_materialListCount = new List<int> { 0, 0, 0, 0, 0 }; //cloth, log, metal, nail, screw
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +32,9 @@ public class CBob : MonoBehaviour
         }
     }
 
-    public void Interact(CPlayer player)
+    public override void Interact(CPlayer player)
     {
+        base.Interact(player);
         //if (interacting)
         //{
         //    CloseMenu();
@@ -58,6 +56,11 @@ public class CBob : MonoBehaviour
         Debug.Log("Interactuando con Bob. Hola amigos.");
     }
 
+    CPlayer getPlayer()
+    {
+        return m_player;
+    }
+
     void OpenMenu()
     {
         interacting = true;
@@ -71,7 +74,7 @@ public class CBob : MonoBehaviour
     }
 
 
-    public static void CheckMaterialsNeeded(CTool m_ToolInProgress)
+    public void CheckMaterialsNeeded(CTool m_ToolInProgress)
     {
         /*
         int totalMaterialsNeeded = 0;
@@ -89,17 +92,21 @@ public class CBob : MonoBehaviour
         Debug.Log("Materiales restantes: " + totalMaterialsNeeded);
         */
 
+        List<int> idsBob = new List<int>();
+        List<int> idsTool = new List<int>();
+
         bool hasAll = false;
-        for (int i = 0; i < CBob.m_materialListCount.Count; i++)
+        for (int i = 0; i < m_materialListCount.Count; i++)
         {
             for (int e = 0; e < m_ToolInProgress.m_materialList.Count; e++)
             {
                 if (i == (int)m_ToolInProgress.m_materialList[e])
                 {
-                    if (CBob.m_materialListCount[i] >= m_ToolInProgress.m_materialListCount[e])
+                    if (m_materialListCount[i] >= m_ToolInProgress.m_materialListCount[e])
                     {
-                        CBob.m_materialListCount[i] -= m_ToolInProgress.m_materialListCount[e];
                         hasAll = true;
+                        idsBob.Add(i);
+                        idsTool.Add(e);
                     }
                     else
                     {
@@ -111,8 +118,14 @@ public class CBob : MonoBehaviour
 
         if (hasAll == true)
         {
+            for (int i = 0; i < idsBob.Count; i++)
+            {
+                m_materialListCount[idsBob[i]] -= m_ToolInProgress.m_materialListCount[idsTool[i]];
+            }
             Debug.Log("All materials in inventory");
-            Instantiate(m_ToolInProgress, GameObject.Find("BobTable").transform.position + new Vector3(0,1,0), Quaternion.identity);
+            var pickable = Instantiate(m_ToolInProgress, GameObject.Find("BobTable").transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+            pickable.Interact(m_player);
+            CloseMenu();
         }
 
     }
