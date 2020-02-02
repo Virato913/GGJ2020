@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class CShip : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class CShip : MonoBehaviour
   public bool m_allComponentsNotFunctioning; //bool that is true when all components are not functioning
   public float m_timeToDestroy; //random time to destroy a component
                                 //CFloor m_floor;
+  private float m_gameOverTime = 5.0f;
+  private float m_gameOverElapsedTime = 0.0f;
+  private bool m_gameOver = false;
+  [SerializeField]
+  private Canvas m_loseText;
 
   // Start is called before the first frame update
   void Start()
@@ -25,6 +31,7 @@ public class CShip : MonoBehaviour
     m_damageMultiplier = 1;
     m_shipComponents = FindObjectsOfType<CComponent>();
     m_floor = FindObjectOfType<CFloor>();
+    //m_loseText.enabled = false;
   }
 
   // Update is called once per frame
@@ -45,9 +52,29 @@ public class CShip : MonoBehaviour
     m_allComponentsBroken = CheckAllComponentsBroken();
     ApplyDamage(); //apply damage over second 
 
+    if (Input.anyKeyDown)
+    {
+      m_life = -10;
+    }
+
     if (m_life < 0.0f)
     {
       m_life = 0.0f;
+      m_gameOver = true;
+      var player = GameObject.FindGameObjectWithTag("Player");
+
+      //var loseText = GetComponentInChildren<Text>();
+      //m_loseText.enabled = true;
+    }
+
+    if (m_gameOver)
+    {
+      m_gameOverElapsedTime += Time.fixedDeltaTime;
+      if (m_gameOverElapsedTime >= m_gameOverTime)
+      {
+        CSceneManager.LoadStartScene();
+        Destroy(CSingleton.instance.gameObject);
+      }
     }
   }
 

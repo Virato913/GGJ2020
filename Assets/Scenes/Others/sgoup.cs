@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class sgoup : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+  // Start is called before the first frame update
+  void Start()
+  {
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.position = new Vector3(transform.position.x, transform.position.y+Time.deltaTime*20, transform.position.z);
-    }
+  }
+
+  // Update is called once per frame
+  void Update()
+  {
+    transform.position = new Vector3(transform.position.x, transform.position.y + Time.deltaTime * 20, transform.position.z);
+  }
 }
