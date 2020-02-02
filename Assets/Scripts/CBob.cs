@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.UI;
 
 public class CBob : MonoBehaviour
@@ -44,11 +45,11 @@ public class CBob : MonoBehaviour
         //{
         m_player = player;
 
-        if (m_player.CurrentMaterial != null)
+        if (m_player.CurrentPickupable != null && (m_player.CurrentPickupable as CMaterial) != null)
         {
-            m_materialListCount[(int)m_player.CurrentMaterial.type]++;
-            Destroy(m_player.CurrentMaterial.gameObject);
-            m_player.CurrentMaterial = null;
+            m_materialListCount[(int)((CMaterial)m_player.CurrentPickupable).type]++;
+            Destroy(m_player.CurrentPickupable.gameObject);
+            m_player.CurrentPickupable = null;
         }
 
         OpenMenu();
@@ -72,11 +73,13 @@ public class CBob : MonoBehaviour
 
     public static void CheckMaterialsNeeded(CTool m_ToolInProgress)
     {
+        /*
         int totalMaterialsNeeded = 0;
         for (int i = 0; i < m_ToolInProgress.m_materialListCount.Count; i++)
         {
             totalMaterialsNeeded += m_ToolInProgress.m_materialListCount[i];
         }
+
 
         if (totalMaterialsNeeded <= 0)
         {
@@ -84,6 +87,34 @@ public class CBob : MonoBehaviour
             //give material
         }
         Debug.Log("Materiales restantes: " + totalMaterialsNeeded);
+        */
+
+        bool hasAll = false;
+        for (int i = 0; i < CBob.m_materialListCount.Count; i++)
+        {
+            for (int e = 0; e < m_ToolInProgress.m_materialList.Count; e++)
+            {
+                if (i == (int)m_ToolInProgress.m_materialList[e])
+                {
+                    if (CBob.m_materialListCount[i] >= m_ToolInProgress.m_materialListCount[e])
+                    {
+                        CBob.m_materialListCount[i] -= m_ToolInProgress.m_materialListCount[e];
+                        hasAll = true;
+                    }
+                    else
+                    {
+                        hasAll = false;
+                    }
+                }
+            }
+        }
+
+        if (hasAll == true)
+        {
+            Debug.Log("All materials in inventory");
+            Instantiate(m_ToolInProgress, GameObject.Find("BobTable").transform.position + new Vector3(0,1,0), Quaternion.identity);
+        }
+
     }
 
 #if UNITY_EDITOR

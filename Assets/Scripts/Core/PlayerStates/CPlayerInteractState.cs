@@ -12,7 +12,7 @@
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStatePostUpdate(CPlayer entity)
+  public override void OnStatePostUpdate(CPlayer entity, bool fixedUpdate = true)
   {
 
   }
@@ -21,7 +21,7 @@
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStateUpdate(CPlayer entity)
+  public override void OnStateUpdate(CPlayer entity, bool fixedUpdate = true)
   {
 
   }

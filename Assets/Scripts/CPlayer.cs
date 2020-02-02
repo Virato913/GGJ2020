@@ -25,18 +25,15 @@ public class CPlayer : MonoBehaviour
   /// <summary>
   /// 
   /// </summary>
-  private CMaterial m_currentMaterial = null;
-
-  /// <summary>
-  /// 
-  /// </summary>
-  private CTool m_currentTool = null;
+  private CPickupable m_currentPickupable = null;
 
   /// <summary>
   /// 
   /// </summary>
   [SerializeField]
   private Vector3 m_direction = new Vector3(0.0f, 0.0f, -1.0f);
+
+  internal Vector3 m_moveDirection = new Vector3(0.0f, 0.0f, 0.0f);
 
   /// <summary>
   /// 
@@ -151,12 +148,12 @@ public class CPlayer : MonoBehaviour
     m_materialLocation += m_materialLocalLocation.z * transform.forward;
   }
 
-  public void DropMaterial(CMaterial material)
+  public void DropMaterial(CPickupable material)
   {
-    m_currentMaterial.transform.SetParent(null);
-    m_currentMaterial.transform.position = material.transform.position;
-    m_currentMaterial.GetComponent<Collider>().enabled = true;
-    m_currentMaterial = null;
+    m_currentPickupable.transform.SetParent(null);
+    m_currentPickupable.transform.position = material.transform.position;
+    m_currentPickupable.GetComponent<Collider>().enabled = true;
+    m_currentPickupable = null;
   }
 
   internal void OnInteract()
@@ -175,9 +172,9 @@ public class CPlayer : MonoBehaviour
           hit.collider.gameObject.GetComponent<CBob>().Interact(this);
           EndInteract();
         }
-        if (hit.collider.gameObject.GetComponent<CMaterial>() != null)
+        if (hit.collider.gameObject.GetComponent<CPickupable>() != null)
         {
-          hit.collider.gameObject.GetComponent<CMaterial>().Interact(this);
+          hit.collider.gameObject.GetComponent<CPickupable>().Interact(this);
           EndInteract();
         }
         Debug.Log("Did Hit");
@@ -245,13 +242,22 @@ public class CPlayer : MonoBehaviour
     UpdateRotation();
   }
 
+  void Update()
+  {
+    m_stateMachine.OnState(this, false);
+  }
+
   /// <summary>
   /// 
   /// </summary>
   void FixedUpdate()
   {
-    m_stateMachine.OnState(this);
+    m_stateMachine.OnState(this, true);
     UpdateMaterialLocation();
+    if (Input.GetKeyDown(KeyCode.E))
+    {
+      EnterThrownState();
+    }
   }
   #endregion
 
@@ -279,16 +285,10 @@ public class CPlayer : MonoBehaviour
     get { return m_stunElapsedTime; }
   }
 
-  public CMaterial CurrentMaterial
+  public CPickupable CurrentPickupable
   {
-    set { m_currentMaterial = value; }
-    get { return m_currentMaterial; }
-  }
-
-  public CTool CurrentTool
-  {
-    set { m_currentTool = value; }
-    get { return m_currentTool; }
+    set { m_currentPickupable = value; }
+    get { return m_currentPickupable; }
   }
 
   public Vector3 MaterialLocation
@@ -311,6 +311,12 @@ public class CPlayer : MonoBehaviour
   {
     set { m_thrownDirection = value; }
     get { return m_thrownDirection; }
+  }
+
+  public Vector3 MoveDirection
+  {
+    set { m_moveDirection = value; }
+    get { return m_moveDirection; }
   }
   #endregion
 

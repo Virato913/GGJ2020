@@ -11,10 +11,10 @@
     CurrentState.OnStateEnter(entity);
   }
 
-  public void OnState(T entity)
+  public void OnState(T entity, bool fixedUpdate = true)
   {
-    CurrentState.OnStateUpdate(entity);
-    CurrentState.OnStatePostUpdate(entity);
+    CurrentState.OnStateUpdate(entity, fixedUpdate);
+    CurrentState.OnStatePostUpdate(entity, fixedUpdate);
   }
 
   public void ToState(CState<T> nextState, T entity)

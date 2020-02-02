@@ -13,11 +13,14 @@ public class CPlayerMoveState : CState<CPlayer>
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStatePostUpdate(CPlayer entity)
+  public override void OnStatePostUpdate(CPlayer entity, bool fixedUpdate = true)
   {
-    if(Input.GetAxisRaw("Vertical") == 0 && Input.GetAxisRaw("Horizontal") == 0)
+    if (!fixedUpdate)
     {
-      m_stateMachine.ToState(entity.m_idleState, entity);
+      if (Input.GetAxisRaw("Vertical") == 0 && Input.GetAxisRaw("Horizontal") == 0)
+      {
+        m_stateMachine.ToState(entity.m_idleState, entity);
+      }
     }
   }
 
@@ -25,26 +28,36 @@ public class CPlayerMoveState : CState<CPlayer>
   /// 
   /// </summary>
   /// <param name="entity"></param>
-  public override void OnStateUpdate(CPlayer entity)
+  public override void OnStateUpdate(CPlayer entity, bool fixedUpdate = true)
   {
     Vector3 direction = new Vector3();
-    direction.x = Input.GetAxisRaw("Horizontal");
-    direction.y = 0;
-    direction.z = Input.GetAxisRaw("Vertical");
-
-    entity.Move(direction.normalized);
-
-    if (Input.GetButtonDown("Jump"))
+    if (!fixedUpdate)
     {
-      entity.BeginInteract();
+      direction.x = Input.GetAxisRaw("Horizontal");
+      direction.y = 0;
+      direction.z = Input.GetAxisRaw("Vertical");
+      entity.MoveDirection = direction;
     }
-    if (Input.GetButton("Jump"))
+
+    if (fixedUpdate)
     {
-      entity.OnInteract();
+      entity.Move(entity.MoveDirection);
     }
-    if (Input.GetButtonUp("Jump"))
+
+    if (!fixedUpdate)
     {
-      entity.EndInteract();
+      if (Input.GetButtonDown("Jump"))
+      {
+        entity.BeginInteract();
+      }
+      if (Input.GetButton("Jump"))
+      {
+        entity.OnInteract();
+      }
+      if (Input.GetButtonUp("Jump"))
+      {
+        entity.EndInteract();
+      }
     }
   }
 }
