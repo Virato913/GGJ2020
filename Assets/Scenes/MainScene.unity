@@ -11880,7 +11880,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &436523389
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22188,7 +22188,7 @@ MonoBehaviour:
   m_allComponentsBroken: 0
   m_allComponentsNotFunctioning: 0
   m_timeToDestroy: 0
-  m_loseText: {fileID: 0}
+  m_loseText: {fileID: 436523392}
 --- !u!224 &852222554
 RectTransform:
   m_ObjectHideFlags: 0

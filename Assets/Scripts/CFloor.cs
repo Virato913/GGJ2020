@@ -19,15 +19,15 @@ public class CFloor : MonoBehaviour
   void Start()
   {
     m_materialList.Add(
-      AssetDatabase.LoadAssetAtPath<CMaterial>("Assets/Prefabs/Materials/Cloth.prefab"));//FindObjectsOfType<CMaterial>();
+      Resources.Load<CMaterial>("Cloth"));//FindObjectsOfType<CMaterial>();
     m_materialList.Add(
-      AssetDatabase.LoadAssetAtPath<CMaterial>("Assets/Prefabs/Materials/Log.prefab"));
+      Resources.Load<CMaterial>("Log"));
     m_materialList.Add(
-      AssetDatabase.LoadAssetAtPath<CMaterial>("Assets/Prefabs/Materials/Metal.prefab"));
+      Resources.Load<CMaterial>("Metal"));
     m_materialList.Add(
-      AssetDatabase.LoadAssetAtPath<CMaterial>("Assets/Prefabs/Materials/Nail.prefab"));
+      Resources.Load<CMaterial>("Nail"));
     m_materialList.Add(
-      AssetDatabase.LoadAssetAtPath<CMaterial>("Assets/Prefabs/Materials/Screw.prefab"));
+      Resources.Load<CMaterial>("Screw"));
     m_floor = GameObject.FindGameObjectsWithTag("floor");
     foreach (GameObject go in m_floor)
     {
