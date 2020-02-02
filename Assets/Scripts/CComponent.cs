@@ -34,10 +34,6 @@ public class CComponent : CInteractable
             m_timeCount += Time.fixedDeltaTime;
             m_warningUI.enabled = true;
         }
-        else
-        {
-            m_warningUI.enabled = false;
-        }
 
         if (!m_broken && (m_timeCount > m_fixTime)) //if the time count exceeds the fix time duration, this component is broken, causing damage per second
         {
@@ -55,6 +51,7 @@ public class CComponent : CInteractable
             m_fixed = false;
             m_broken = false;
             m_functioning = true;
+            m_warningUI.enabled = false;
         }
 
     }
