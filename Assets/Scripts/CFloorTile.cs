@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CFloorTile : MonoBehaviour
+public class CFloorTile : CInteractable
 {
   [SerializeField]
   private Vector3 m_LocalSpawnLocation;
@@ -12,6 +12,20 @@ public class CFloorTile : MonoBehaviour
     if(m_currentMaterial == null)
     {
       m_currentMaterial = Instantiate(material, m_LocalSpawnLocation + transform.position, Quaternion.identity);
+    }
+  }
+
+  public override void Interact(CPlayer player)
+  {
+    base.Interact(player);
+    if ((player.CurrentPickupable as CTool) != null)
+    {
+      if ((player.CurrentPickupable as CTool).m_type == TOOL_TYPES.FLOOR)
+      {
+        GetComponent<MeshRenderer>().enabled = true;
+        GetComponent<BoxCollider>().enabled = false;
+        Destroy(player.CurrentPickupable.gameObject);
+      }
     }
   }
 
