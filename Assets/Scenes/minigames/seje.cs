@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class seje : MonoBehaviour
 {
-    public Vector3 touchPos;
+    Vector3 touchPos;
+    public float tiempo,vueltas;
     double distancia;
-    public float angulo = 0;
+    float angulo = 0;
     float inicio=0;
     public GameObject rueda;
-    public Vector2 mio, otro;
-    public bool win=false;
+    Vector2 mio, otro;
+    public bool win=false,end=false;
+    float timer = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,10 +23,17 @@ public class seje : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (angulo > 360 * 5)
+        timer += Time.deltaTime;
+        if (timer > tiempo)
+        {
+            end = true;
+            win = false;
+        }
+        if (angulo > 360 * vueltas)
         {
             win = true;
         }
+
         mio = new Vector2(transform.position.x, transform.position.y);
         otro = new Vector2(touchPos.x, touchPos.y);
         touchPos = Input.mousePosition;

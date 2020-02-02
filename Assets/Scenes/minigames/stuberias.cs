@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class stuberias : MonoBehaviour
 {
-    public int dificulty;
+    public float tiempo;
     public GameObject tuberia,largo,curva;
     List<int> usados = new List<int>(),usa2 = new List<int>();
     public float inicio, fin,distancia;
@@ -20,15 +20,15 @@ public class stuberias : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        distancia = (fin - inicio) / ((float)dificulty + 3);
-        for(int a = 0; a < dificulty + 2; a++)
+        distancia = (fin - inicio) / ((float)5);
+        for(int a = 0; a < 4; a++)
         {
             tuberia.transform.position = new Vector3(0, inicio + (a + 1) * distancia, 0);
             tuberia.transform.rotation = Quaternion.Euler(0, 0, -90);
-            cual = Random.Range(0, dificulty + 2);
+            cual = Random.Range(0, 4);
             while (usados.Contains(cual))
             {
-                cual = Random.Range(0, dificulty + 2);
+                cual = Random.Range(0, 4);
             }
             tuberia.GetComponent<SpriteRenderer>().color = colores[cual];
             usados.Add(cual);
@@ -37,14 +37,14 @@ public class stuberias : MonoBehaviour
             cosas.Add(GameObject.Find("tuberia" + e.ToString()));
             e += 1;
         }
-        for (int a = 0; a < dificulty + 2; a++)
+        for (int a = 0; a < 4; a++)
         {
             tuberia.transform.position = new Vector3(5, inicio + (a + 1) * distancia, 0);
             tuberia.transform.rotation = Quaternion.Euler(0, 0, 90);
-            cual = Random.Range(0, dificulty + 2);
+            cual = Random.Range(0, 4);
             while (usa2.Contains(cual))
             {
-                cual = Random.Range(0, dificulty + 2);
+                cual = Random.Range(0, 4);
             }
             tuberia.GetComponent<SpriteRenderer>().color = colores[usados[cual]];
             usa2.Add(cual);
@@ -101,18 +101,18 @@ public class stuberias : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if(timer > 5)
+        if(timer > tiempo)
         {
             end = true;
             win = false;
         }
-        if(todas == dificulty + 2)
+        if(todas == 4)
         {
             end = true;
         }
         if (ya)
         {
-            for (int a = dificulty + 2; a < (dificulty + 2) * 2; a++)
+            for (int a = 4; a < (4) * 2; a++)
             {
                 if (cosas[a].GetComponent<stube>().klikeado)
                 {
@@ -131,13 +131,13 @@ public class stuberias : MonoBehaviour
                 }
             }
         }
-        for (int a = 0; a < dificulty + 2; a++)
+        for (int a = 0; a < 4; a++)
         {
             if (cosas[a].GetComponent<stube>().klikeado)
             {
                 e = a;
                 ya = true;
-                for (int i = 0; i < dificulty + 2; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     if(i != a)
                     {

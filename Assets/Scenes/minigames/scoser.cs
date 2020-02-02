@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class scoser : MonoBehaviour
 {
+    public float tiempo;
     Vector3 wp;
     public Vector3 touchPos;
     public GameObject punto;
@@ -44,7 +45,7 @@ public class scoser : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if (timer > 5)
+        if (timer > tiempo)
         {
             end = true;
             win = false;

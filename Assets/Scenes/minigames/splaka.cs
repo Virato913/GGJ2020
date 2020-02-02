@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class stabla : MonoBehaviour
+public class splaka : MonoBehaviour
 {
     public float tiempo;
-    public bool end = false, win = true;
     float timer = 0;
-    public int cuantos = 0;
-    
+    public bool end=false, win=true;
+    public int perimetro = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +23,7 @@ public class stabla : MonoBehaviour
             end = true;
             win = false;
         }
-        if (cuantos == 4)
+        if(perimetro == 45)
         {
             end = true;
         }
