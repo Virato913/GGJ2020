@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CPickupable : MonoBehaviour
+public class CPickupable : CInteractable
 {
-  public void Interact(CPlayer player)
+  public override void Interact(CPlayer player)
   {
     if (player.CurrentPickupable != null)
     {

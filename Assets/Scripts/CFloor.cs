@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CFloor : MonoBehaviour
+public class CFloor : CInteractable
 {
      public GameObject[] m_floor; //all cells of floor prefab
 
@@ -15,7 +13,7 @@ public class CFloor : MonoBehaviour
     void Start()
     {
         m_floor = GameObject.FindGameObjectsWithTag("floor");
-        m_player = GameObject.FindObjectOfType<CPlayer>();
+        m_player = FindObjectOfType<CPlayer>();
         m_timeCounter = 0;
         m_randomTime = Random.Range(10, 15);
     }
@@ -50,7 +48,7 @@ public class CFloor : MonoBehaviour
 
     }
 
-    public void Interact(CPlayer player)
+    public override void Interact(CPlayer player)
     {
         m_player = player;
         if((m_player.CurrentPickupable as CMaterial) != null) {

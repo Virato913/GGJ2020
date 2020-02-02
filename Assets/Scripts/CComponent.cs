@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CComponent : MonoBehaviour
+public class CComponent : CInteractable
 {
 
   public float m_fixTime; //maximun time for the player to complete the minigame
@@ -68,7 +66,7 @@ public class CComponent : MonoBehaviour
     return m_toolID;
   }
 
-  public void interact(CPlayer player)
+  public override void Interact(CPlayer player)
   {
     m_player = player;
     if (Vector3.Distance(m_player.transform.position, transform.position) > m_interactRange)
